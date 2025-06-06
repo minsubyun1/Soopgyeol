@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 
 contact_links:
-  - name: 📌 GonggakSim 백엔드 이슈 가이드
-    url: https://github.com/GonggakSim/Backend/issues
+  - name: 📌 숲결 백엔드 이슈 가이드
+    url: https://github.com/soopgyeol/issues
     about: 일반적인 문의나 버그 리포트 전에 이슈 가이드를 확인해주세요.
 
 issue_templates:
