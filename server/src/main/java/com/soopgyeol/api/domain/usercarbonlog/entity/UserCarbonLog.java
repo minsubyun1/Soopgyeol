@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,5 +36,5 @@ public class UserCarbonLog {
     private float calculatedCarbon;
 
     @Column(nullable = false)
-    private LocalDate recordedAt;
+    private LocalDateTime recordedAt;
 }
