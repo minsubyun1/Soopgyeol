@@ -1,7 +1,9 @@
 package com.soopgyeol.api.service.jwt;
 
 import com.soopgyeol.api.domain.user.Role;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -18,12 +20,14 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-@RequiredArgsConstructor
 public class JwtProvider {
 
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private final String secret;
+
+    public JwtProvider(Dotenv dotenv) {
+        this.secret = dotenv.get("JWT_SECRET");
+    }
 
     /** 액세스 토큰 유효기간*/
     private final long ACCESS_VALIDITY = 1000 * 60 * 60 * 2;   // 2h
@@ -54,6 +58,15 @@ public class JwtProvider {
                 .build()
                 .parseClaimsJws(token)   // 서명·만료 자동 확인
                 .getBody();              // -> Claims
+    }
+    public Long getUserId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.valueOf(claims.getSubject()); // subject에 userId 저장된 경우
     }
 }
 
