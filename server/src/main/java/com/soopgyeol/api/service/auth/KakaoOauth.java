@@ -21,7 +21,7 @@ public class KakaoOauth implements SocialOauth {
 
     private final RestTemplate rest = new RestTemplate();
     private final ObjectMapper om = new ObjectMapper();
-    private final Dotenv dotenv;
+    private final Dotenv dotenv = Dotenv.load();
 
     private final String clientId     = dotenv.get("KAKAO_CLIENT_ID");
     private final String redirectUri  = dotenv.get("KAKAO_REDIRECT_URI");

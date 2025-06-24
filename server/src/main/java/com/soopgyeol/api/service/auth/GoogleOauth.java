@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soopgyeol.api.domain.user.SocialLoginType;
 import com.soopgyeol.api.dto.oauth.SocialUserInfo;
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,18 +18,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
+
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class GoogleOauth implements SocialOauth {
 
     private final RestTemplate rest = new RestTemplate();
     private final ObjectMapper om  = new ObjectMapper();
-    private final Dotenv dotenv;
 
-    private final String clientId     = dotenv.get("GOOGLE_CLIENT_ID");
-    private final String clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
-    private final String redirectUri  = dotenv.get("GOOGLE_REDIRECT_URI");
+    private final String clientId;
+    private final String clientSecret;
+    private final String redirectUri;
 
+    @Autowired
+    public GoogleOauth(Dotenv dotenv) {
+
+        this.clientId = dotenv.get("GOOGLE_CLIENT_ID");
+        this.clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
+        this.redirectUri = dotenv.get("GOOGLE_REDIRECT_URI");
+
+
+    }
     @Override
     public SocialLoginType type() {
         return SocialLoginType.GOOGLE;
@@ -48,29 +59,33 @@ public class GoogleOauth implements SocialOauth {
 
     @Override
     public String requestAccessToken(String code) {
-        MultiValueMap<String,String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type",    "authorization_code");
-        body.add("code",          code);
-        body.add("client_id",     clientId);
-        body.add("client_secret", clientSecret);
-        body.add("redirect_uri",  redirectUri);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         try {
             String tokenJson = rest.postForObject(
                     "https://oauth2.googleapis.com/token",
-                    new HttpEntity<>(body, headers),
+                    request,
                     String.class
             );
-            System.out.println(">>> Google token response: " + tokenJson);
+            System.out.println("구글 토큰 응답: " + tokenJson);
             return tokenJson;
         } catch (HttpClientErrorException ex) {
             System.out.println("token 요청 실패: " + ex.getResponseBodyAsString());
             throw ex;
         }
     }
+
 
     @Override
     public SocialUserInfo getUserInfo(String accessToken, String ignore) throws IOException {
