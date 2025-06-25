@@ -75,7 +75,6 @@ public class GoogleOauth implements SocialOauth {
                     request,
                     String.class
             );
-            System.out.println("✅ 구글 토큰 응답: " + tokenJson);
             return tokenJson;
         } catch (HttpClientErrorException ex) {
             System.out.println("❌ token 요청 실패: " + ex.getResponseBodyAsString());

@@ -35,7 +35,7 @@ public class JwtProvider {
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);   // HS256 자동
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     /** 토큰 생성 */
@@ -61,13 +61,14 @@ public class JwtProvider {
     }
     public Long getUserId(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                .setSigningKey(getSigningKey())  // 수정: 일관성 유지하기 위함
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return Long.valueOf(claims.getSubject()); // subject에 userId 저장된 경우
+        return Long.valueOf(claims.getSubject());
     }
+
 }
 
 
