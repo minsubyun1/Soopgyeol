@@ -37,8 +37,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain         chain)
             throws ServletException, IOException {
 
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String path = request.getRequestURI();
+        // carbon 관련 경로만 임시 인증 우회
+        if (path.startsWith("/carbon")) {
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            "test@example.com", // principal (이메일 또는 유저 객체)
+                            null,
+                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                    );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
+            return;
+        }
 
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
@@ -48,17 +61,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = header.substring(7);
 
         try {
-
             Claims claims = jwtProvider.parse(token);
             Long userId = Long.valueOf(claims.getSubject());
             Role role   = Role.valueOf((String) claims.get("role"));
 
-
-
-
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("탈퇴한 사용자"));
-
 
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
