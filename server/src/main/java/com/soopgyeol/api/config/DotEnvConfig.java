@@ -10,11 +10,8 @@ public class DotEnvConfig {
     @Bean
     public Dotenv dotenv() {
         // .env 파일을 읽어서 환경변수로 사용
-        // .env 파일이 없으면 시스템 환경변수를 사용
-        return Dotenv.configure()
-                .directory("./")
+        return Dotenv.configure().directory("./")
                 .ignoreIfMissing() // .env 파일이 없어도 에러 발생 안함
-                .systemProperties() // 시스템 환경변수도 함께 로드
                 .load();
     }
 }
