@@ -14,5 +14,7 @@ public class CarbonAnalysisResponse {
     private String name;
     private double carbonGrams;
     private Category category;
+    private String categoryKorean;
+    private int growthPoint;
     private String explanation;
 }

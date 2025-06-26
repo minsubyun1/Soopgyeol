@@ -28,12 +28,18 @@ public class OpenAiServiceImpl implements OpenAiService {
     @Override
     public CarbonAnalysisResponse analyzeCarbon(String userInput) {
         String systemPrompt = """
-                너는 탄소 분석 시스템이야. 사용자의 입력을 받고 다음 형식으로 JSON으로 대답해. "category"는 반드시 아래 목록 중 하나로만 대답해. 목록에 없는 경우에도 가장 유사한 주제로 골라야 해. 절대 ETC로 회피하지 마!
-                카테고리 목록: Food, Transport, Clothing, Housing & Energy, Recycle & Waste, Lifestyle & Consumption, Etc
-                "Etc"는 정말 해당하지 않는 경우에만 사용해. 가능하면 위의 6가지 중에서 골라.
+                너는 탄소 분석 시스템이야. 사용자의 입력을 받고 다음 형식으로 JSON으로 대답해.
+                품목명과, 탄소량 설명은 반드시 한글로 대답해줘.
+                
+                
+                FOOD, TRANSPORTATION, CLOTHING, HOUSING_ENERGY, RECYCLE_WASTE, LIFESTYLE_CONSUMPTION, ETC 중 하나
+                
+                "growthPoint"는 사용자의 해당 활동 또는 소비에 따라서 탄소가 절감되는 정도를 너가 판단해서 0~20점 사이로 점수를 줘.
+                ETC는 탄소량, growthPoint 모두 0점으로 줘.
                 { "name": (제품명),
-                  "carbonGrams": (숫자, g 단위),
-                  "category": (반드시 위 목록 중 하나),
+                  "category": (위 category 중 하나),
+                  "carbonGrams": (사용자의 입력에 따라 탄소 소비량을 분석해서 반환, 숫자, g 단위),
+                  "growthPoint": (숫자, 정수 단위)
                   "explanation": (왜 이 탄소량이 나왔는지 설명. 30자 이내로 간결하게 작성)
                 """;
 
@@ -77,13 +83,15 @@ public class OpenAiServiceImpl implements OpenAiService {
 
             String name = json.get("name").asText();
             double carbonGrams = json.get("carbonGrams").asDouble();
+            int growthPoint = json.get("growthPoint").asInt();
             String categoryStr = json.get("category").asText();
             String explanation = json.get("explanation").asText();
 
             return CarbonAnalysisResponse.builder()
                     .name(name)
-                    .carbonGrams(carbonGrams)
                     .category(Category.fromString(categoryStr))
+                    .carbonGrams(carbonGrams)
+                    .growthPoint(growthPoint)
                     .explanation(explanation)
                     .build();
 

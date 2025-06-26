@@ -6,6 +6,7 @@ import com.soopgyeol.api.domain.user.SocialLoginType;
 import com.soopgyeol.api.dto.oauth.SocialUserInfo;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,11 +22,21 @@ public class KakaoOauth implements SocialOauth {
 
     private final RestTemplate rest = new RestTemplate();
     private final ObjectMapper om = new ObjectMapper();
-    private final Dotenv dotenv = Dotenv.load();
+    
+    @Autowired
+    private Dotenv dotenv;
 
-    private final String clientId     = dotenv.get("KAKAO_CLIENT_ID");
-    private final String redirectUri  = dotenv.get("KAKAO_REDIRECT_URI");
-    private final String clientSecret = dotenv.get("KAKAO_CLIENT_SECRET"); // optional
+    private String getClientId() {
+        return dotenv.get("KAKAO_CLIENT_ID");
+    }
+    
+    private String getRedirectUri() {
+        return dotenv.get("KAKAO_REDIRECT_URI");
+    }
+    
+    private String getClientSecret() {
+        return dotenv.get("KAKAO_CLIENT_SECRET");
+    }
 
     @Override
     public SocialLoginType type() {
@@ -35,8 +46,8 @@ public class KakaoOauth implements SocialOauth {
     @Override
     public String getOauthRedirectURL() {
         return UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
-                .queryParam("client_id", clientId)
-                .queryParam("redirect_uri", redirectUri)
+                .queryParam("client_id", getClientId())
+                .queryParam("redirect_uri", getRedirectUri())
                 .queryParam("response_type", "code")
                 .queryParam("scope", "profile_nickname account_email")
                 .build()
@@ -47,10 +58,10 @@ public class KakaoOauth implements SocialOauth {
     public String requestAccessToken(String code) {
         MultiValueMap<String,String> body = new LinkedMultiValueMap<>();
         body.add("grant_type",    "authorization_code");
-        body.add("client_id",     clientId);
-        body.add("client_secret", clientSecret);
+        body.add("client_id",     getClientId());
+        body.add("client_secret", getClientSecret());
         body.add("code",          code);
-        body.add("redirect_uri",  redirectUri);
+        body.add("redirect_uri",  getRedirectUri());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

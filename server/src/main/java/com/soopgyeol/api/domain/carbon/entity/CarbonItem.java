@@ -30,6 +30,9 @@ public class CarbonItem {
     @Column(nullable = false)
     private float carbonValue;
 
+    @Column(nullable = false)
+    private int growthPoint;
+
     @Column(columnDefinition = "TEXT")
     private String explanation;
 
