@@ -20,6 +20,7 @@ jobs:
           java-version: '17'
 
       - name: Build with Gradle
+        working-directory: ./server
         run: ./gradlew clean build
 
       - name: Upload jar to EC2 via SCP
@@ -28,7 +29,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "build/libs/*.jar"
+          source: "server/build/libs/*.jar"
           target: "/home/ubuntu/app"  # ← EC2 안에 jar 복사될 경로
 
       - name: Run jar on EC2 via SSH
