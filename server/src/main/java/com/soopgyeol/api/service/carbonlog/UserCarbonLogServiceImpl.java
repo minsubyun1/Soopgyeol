@@ -28,12 +28,14 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService{
                 .orElseThrow(() -> new IllegalArgumentException("탄소 품목이 존재하지 않습니다."));
 
         float totalCarbon = carbonItem.getCarbonValue() * request.getQuantity();
+        int totalGrowthPoint = carbonItem.getGrowthPoint() * request.getQuantity();
 
         UserCarbonLog log = UserCarbonLog.builder()
                 .user(user)
                 .carbonItem(carbonItem)
                 .quantity(request.getQuantity())
                 .calculatedCarbon(totalCarbon)
+                .growthPoint(totalGrowthPoint)
                 .recordedAt(LocalDate.now())
                 .build();
 

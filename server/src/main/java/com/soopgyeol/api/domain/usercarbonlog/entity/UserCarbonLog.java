@@ -35,5 +35,8 @@ public class UserCarbonLog {
     private float calculatedCarbon;
 
     @Column(nullable = false)
+    private int growthPoint;
+
+    @Column(nullable = false)
     private LocalDate recordedAt;
 }
