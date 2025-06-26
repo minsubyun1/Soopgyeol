@@ -28,7 +28,7 @@ jobs:
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "server/build/libs/*.jar"
           target: "/home/ubuntu/app"  # ← EC2 안에 jar 복사될 경로
 
