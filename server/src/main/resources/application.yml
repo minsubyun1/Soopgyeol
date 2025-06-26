@@ -18,4 +18,4 @@ spring:
       matching-strategy: ant_path_matcher
 
 server:
-  port: 3003
+  port: 3005
