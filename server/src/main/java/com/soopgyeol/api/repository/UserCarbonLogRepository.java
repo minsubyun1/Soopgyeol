@@ -13,6 +13,4 @@ public interface UserCarbonLogRepository extends JpaRepository<UserCarbonLog, Lo
 
     List <UserCarbonLog> findByUserIdAndRecordedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT COALESCE(SUM(u.calculatedCarbon), 0) FROM UserCarbonLog u WHERE u.user.id = :userId AND DATE(u.recordedAt) = :date")
-    float findTotalCarbonByUserIdAndDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 }
