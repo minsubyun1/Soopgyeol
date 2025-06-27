@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17dj rm
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -24,6 +28,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Upload jar to EC2 via SCP
+        if: github.event_name == 'push'
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -33,6 +38,7 @@ jobs:
           target: "/home/ubuntu/app"  # ← EC2 안에 jar 복사될 경로
 
       - name: Run jar on EC2 via SSH
+        if: github.event_name == 'push'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
