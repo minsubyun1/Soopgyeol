@@ -10,4 +10,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
   List<Inventory> findByUser(User user);
 
   List<Inventory> findByUserAndIsDisplayedTrue(User user);
+
+  List<Inventory> findByUserAndIsBuyedTrue(User user);
 }
