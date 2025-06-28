@@ -8,15 +8,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
 
@@ -34,6 +34,12 @@ public class User {
     private SocialLoginType provider;         // GOOGLE, KAKAO
 
     private String socialId;
+
+    @Column(name = "money_balance", nullable = false)
+    private int moneyBalance;
+
+    @Column(name = "growth_point", nullable = false)
+    private int growthPoint;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
