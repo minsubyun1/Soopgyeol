@@ -8,4 +8,6 @@ public interface ItemService {
   List<ItemResponse> getItemsByUserIdAndCategory(Long userId, ItemCategory category);
 
   List<ItemResponse> getDisplayedItemsByUserId(Long userId);
+
+  List<ItemResponse> getBuyedItemsByUserId(Long userId);
 }

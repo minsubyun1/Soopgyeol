@@ -31,4 +31,12 @@ public class ItemController {
     List<ItemResponse> items = itemService.getDisplayedItemsByUserId(userId);
     return ResponseEntity.ok(new ApiResponse<>(true, "유저의 전시 아이템 조회 성공", items));
   }
+
+  @GetMapping("/items/user/{userId}/inventory")
+  public ResponseEntity<ApiResponse<List<ItemResponse>>> getBuyedItemsByUser(
+      @PathVariable Long userId) {
+    List<ItemResponse> items = itemService.getBuyedItemsByUserId(userId);
+    return ResponseEntity.ok(new ApiResponse<>(true, "유저의 인벤토리(보유 아이템) 조회 성공", items));
+  }
 }
+
