@@ -28,16 +28,16 @@ public class TreeStageServiceImpl implements TreeStageService {
     String treeUrl;
     if (growth <= 100) {
       treeName = "씨앗";
-      treeUrl = "https://example.com/tree-seed.png";
+      treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png";
     } else if (growth <= 300) {
       treeName = "새싹";
-      treeUrl = "https://example.com/tree-sprout.png";
+      treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/sappling.png";
     } else if (growth <= 700) {
       treeName = "어린 나무";
-      treeUrl = "https://example.com/tree-young.png";
+      treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/littletree.png";
     } else {
       treeName = "나무";
-      treeUrl = "https://example.com/tree-tree.png";
+      treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/tree.png";
     }
 
     userStage.setTreeName(treeName);
