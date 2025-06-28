@@ -1,13 +1,13 @@
-openai:
-  api:
-    key: ${OPENAI_API_KEY}
-
 spring:
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
 
   jpa:
     hibernate:
