@@ -31,9 +31,18 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        carbonItemRepository.save(carbonItem);
+        CarbonItem savedItem = carbonItemRepository.save(carbonItem);
 
-        return analysis;
+
+        return CarbonAnalysisResponse.builder()
+                .carbonItemId(savedItem.getId())
+                .name(savedItem.getName())
+                .category(savedItem.getCategory())
+                .categoryKorean(analysis.getCategoryKorean())
+                .carbonGrams(savedItem.getCarbonValue())
+                .growthPoint(savedItem.getGrowthPoint())
+                .explanation(savedItem.getExplanation())
+                .build();
     }
 
 }

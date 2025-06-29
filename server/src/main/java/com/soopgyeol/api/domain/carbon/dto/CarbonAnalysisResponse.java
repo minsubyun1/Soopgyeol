@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarbonAnalysisResponse {
+    private Long carbonItemId;
     private String name;             // 상품명
     private double carbonGrams;      // 탄소량 (g)
     private Category category;       // 카테고리
