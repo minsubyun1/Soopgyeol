@@ -50,7 +50,7 @@ public class OAuthServiceImpl implements OAuthService {
         System.out.println(">>> 활성 SocialOauth = " + oauthMap.keySet()); // [GOOGLE, KAKAO]
     }
 
-    /* OAuth 로그인 */
+
     @Override
     public OAuthLoginResponse login(OAuthLoginRequest request) {
 
@@ -79,7 +79,7 @@ public class OAuthServiceImpl implements OAuthService {
 
 
         String tokenJson = oauth.requestAccessToken(request.getCode());
-        System.out.println(">>> tokenJson = " + tokenJson);
+//        System.out.println(">>> tokenJson = " + tokenJson);
 
 
         String accessToken;

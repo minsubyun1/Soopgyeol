@@ -30,13 +30,12 @@ public class GoogleOauth implements SocialOauth {
     private final String clientSecret;
     private final String redirectUri;
 
+
     @Autowired
     public GoogleOauth(Dotenv dotenv) {
-
         this.clientId = dotenv.get("GOOGLE_CLIENT_ID");
         this.clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
         this.redirectUri = dotenv.get("GOOGLE_REDIRECT_URI");
-
 
     }
     @Override
@@ -78,10 +77,9 @@ public class GoogleOauth implements SocialOauth {
                     request,
                     String.class
             );
-            System.out.println("구글 토큰 응답: " + tokenJson);
             return tokenJson;
         } catch (HttpClientErrorException ex) {
-            System.out.println("token 요청 실패: " + ex.getResponseBodyAsString());
+            System.out.println("❌ token 요청 실패: " + ex.getResponseBodyAsString());
             throw ex;
         }
     }

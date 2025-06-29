@@ -29,13 +29,12 @@ public class JwtProvider {
         this.secret = dotenv.get("JWT_SECRET");
     }
 
-
     private final long ACCESS_VALIDITY = 1000 * 60 * 60 * 2;   // 2h
 
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);   // HS256 자동
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 
@@ -61,10 +60,18 @@ public class JwtProvider {
     }
     public Long getUserId(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+
+                .setSigningKey(getSigningKey())  // 수정: 일관성 유지하기 위함
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
+        return Long.valueOf(claims.getSubject());
+    }
+
+}
+
+
 
         return Long.valueOf(claims.getSubject());
     }
