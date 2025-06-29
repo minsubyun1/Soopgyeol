@@ -30,11 +30,13 @@ public class GoogleOauth implements SocialOauth {
     private final String clientSecret;
     private final String redirectUri;
 
+
     @Autowired
     public GoogleOauth(Dotenv dotenv) {
         this.clientId = dotenv.get("GOOGLE_CLIENT_ID");
         this.clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
         this.redirectUri = dotenv.get("GOOGLE_REDIRECT_URI");
+
     }
     @Override
     public SocialLoginType type() {

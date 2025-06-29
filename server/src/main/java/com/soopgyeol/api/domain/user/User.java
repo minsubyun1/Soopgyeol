@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +17,9 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -35,10 +36,15 @@ public class User {
 
     private String socialId;
 
+    @Column(name = "money_balance", nullable = false)
+    private int moneyBalance;
+
+    @Column(name = "growth_point", nullable = false)
+    private int growthPoint;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
-

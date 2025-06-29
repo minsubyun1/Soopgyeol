@@ -29,7 +29,6 @@ public class JwtProvider {
         this.secret = dotenv.get("JWT_SECRET");
     }
 
-    /** 액세스 토큰 유효기간*/
     private final long ACCESS_VALIDITY = 1000 * 60 * 60 * 2;   // 2h
 
 
@@ -38,7 +37,7 @@ public class JwtProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    /** 토큰 생성 */
+
     public String createToken(Long userId, Role role) {
         long now = System.currentTimeMillis();
 
@@ -47,7 +46,7 @@ public class JwtProvider {
                 .claim("role", role.name())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + ACCESS_VALIDITY))
-                .signWith(getSigningKey())   // 키만 넘기면 HS256
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -61,6 +60,7 @@ public class JwtProvider {
     }
     public Long getUserId(String token) {
         Claims claims = Jwts.parserBuilder()
+
                 .setSigningKey(getSigningKey())  // 수정: 일관성 유지하기 위함
                 .build()
                 .parseClaimsJws(token)
@@ -72,3 +72,7 @@ public class JwtProvider {
 }
 
 
+
+        return Long.valueOf(claims.getSubject());
+    }
+}

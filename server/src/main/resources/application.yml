@@ -1,9 +1,13 @@
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/soop_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul"
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
 
   jpa:
     hibernate:
@@ -17,12 +21,8 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-
-
 server:
   port: 8080
-
-
 
 oauth:
   google:
@@ -36,3 +36,15 @@ oauth:
 
 jwt:
   secret: ${JWT_SECRET}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+      secret-key: ${CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+    s3:
+      bucket: ${BUCKET_NAME}
+    region:
+      static: ${CLOUD_AWS_REGION_STATIC}
+    stack:
+      auto: false
