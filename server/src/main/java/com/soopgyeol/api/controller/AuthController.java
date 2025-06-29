@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth/oauth")
 public class AuthController {
+
+    @Value("${oauth.redirect.frontend-url}")
+    private String frontendRedirectUrl;
 
     private final OAuthService oAuthService;
     private final GoogleOauth googleOauth;
@@ -39,15 +43,13 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("url", url));
     }
 
-    // 구글 로그인 성공 후 리디렉트 → code만 프론트로 전달
     @GetMapping("/oauth2/google/code-log")
     public void googleAutoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:3000/oauth?code=" + code);
+        response.sendRedirect(frontendRedirectUrl + "?code=" + code);
     }
 
-    // 카카오 로그인 성공 후 리디렉트 → code만 프론트로 전달
     @GetMapping("/oauth2/kakao/code-log")
     public void kakaoAutoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:3000/oauth?code=" + code);
+        response.sendRedirect(frontendRedirectUrl + "?code=" + code);
     }
 }
