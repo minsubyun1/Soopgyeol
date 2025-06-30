@@ -10,6 +10,7 @@ import com.soopgyeol.api.repository.UserCarbonLogRepository;
 import com.soopgyeol.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService{
     private final UserCarbonLogRepository carbonLogRepository;
 
     @Override
+    @Transactional
     public void saveCarbonLog(UserCarbonLogRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
@@ -33,6 +35,10 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService{
 
         float totalCarbon = carbonItem.getCarbonValue() * request.getQuantity();
         int totalGrowthPoint = carbonItem.getGrowthPoint() * request.getQuantity();
+
+        // User 엔티티의 growthPoint 갱신
+        user.setGrowthPoint(user.getGrowthPoint() + totalGrowthPoint);
+        userRepository.save(user);
 
         UserCarbonLog log = UserCarbonLog.builder()
                 .user(user)
