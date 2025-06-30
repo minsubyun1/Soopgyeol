@@ -71,3 +71,7 @@ public class JwtProvider {
 
 }
 
+        return Long.valueOf(claims.getSubject());
+        }
+}
+

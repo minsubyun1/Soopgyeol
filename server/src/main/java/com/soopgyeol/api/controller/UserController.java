@@ -4,6 +4,7 @@ import com.soopgyeol.api.common.dto.NicknameUpdateRequest;
 import com.soopgyeol.api.common.dto.NicknameUpdateResponse;
 import com.soopgyeol.api.service.UserService;
 import com.soopgyeol.api.service.jwt.JwtProvider;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
