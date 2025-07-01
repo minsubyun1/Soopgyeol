@@ -6,6 +6,7 @@ import com.soopgyeol.api.domain.user.SocialLoginType;
 import com.soopgyeol.api.dto.oauth.SocialUserInfo;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,7 +25,10 @@ public class KakaoOauth implements SocialOauth {
     private final Dotenv dotenv = Dotenv.load();
 
     private final String clientId     = dotenv.get("KAKAO_CLIENT_ID");
-    private final String redirectUri  = dotenv.get("KAKAO_REDIRECT_URI");
+
+    //private final String redirectUri  = dotenv.get("KAKAO_REDIRECT_URI");
+    @Value("${oauth.kakao.redirect-uri}")
+    private String redirectUri;
     private final String clientSecret = dotenv.get("KAKAO_CLIENT_SECRET"); // optional
 
     @Override

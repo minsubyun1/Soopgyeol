@@ -28,11 +28,11 @@ oauth:
   google:
     client-id: ${GOOGLE_CLIENT_ID}
     client-secret: ${GOOGLE_CLIENT_SECRET}
-    redirect-uri: ${GOOGLE_REDIRECT_URI}
+    redirect-uri: https://soopgyeol.site/api/v1/auth/oauth/oauth2/google/code-log #${GOOGLE_REDIRECT_URI}
   kakao:
     client-id: ${KAKAO_CLIENT_ID}
     client-secret: ${KAKAO_CLIENT_SECRET}
-    redirect-uri: ${KAKAO_REDIRECT_URI}
+    redirect-uri:  https://soopgyeol.site/api/v1/auth/oauth/oauth2/kakao/code-log #${KAKAO_REDIRECT_URI}
 
 jwt:
   secret: ${JWT_SECRET}

@@ -8,6 +8,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -28,14 +29,16 @@ public class GoogleOauth implements SocialOauth {
 
     private final String clientId;
     private final String clientSecret;
-    private final String redirectUri;
+
+    @Value("${oauth.google.redirect-uri}")
+    private String redirectUri;
 
 
     @Autowired
     public GoogleOauth(Dotenv dotenv) {
         this.clientId = dotenv.get("GOOGLE_CLIENT_ID");
         this.clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
-        this.redirectUri = dotenv.get("GOOGLE_REDIRECT_URI");
+        //this.redirectUri = dotenv.get("GOOGLE_REDIRECT_URI");
 
     }
     @Override
