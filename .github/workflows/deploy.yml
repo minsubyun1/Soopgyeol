@@ -1,0 +1,50 @@
+name: CI/CD to EC2 (via SCP + nohup)
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17dj rm
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build with Gradle
+        working-directory: ./server
+        run: ./gradlew clean build
+
+      - name: Upload jar to EC2 via SCP
+        if: github.event_name == 'push'
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "server/build/libs/*.jar"
+          target: "/home/ubuntu/app"  # ← EC2 안에 jar 복사될 경로
+
+      - name: Run jar on EC2 via SSH
+        if: github.event_name == 'push'
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            bash /home/ubuntu/app/start-app.sh

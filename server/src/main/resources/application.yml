@@ -48,3 +48,5 @@ cloud:
       static: ${CLOUD_AWS_REGION_STATIC}
     stack:
       auto: false
+
+  port: 3005
