@@ -20,7 +20,6 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -29,10 +28,10 @@ public class User {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    private Role role;                        // USER, ADMIN
+    private Role role; // USER, ADMIN
 
     @Enumerated(EnumType.STRING)
-    private SocialLoginType provider;         // GOOGLE, KAKAO
+    private SocialLoginType provider; // GOOGLE, KAKAO
 
     private String socialId;
 
@@ -47,4 +46,8 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void increaseGrowthPoint(int point) {
+        this.growthPoint += point;
+    }
 }
