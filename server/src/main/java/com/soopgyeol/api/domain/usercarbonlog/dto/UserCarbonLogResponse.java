@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+
 @Getter
 @Builder
 public class UserCarbonLogResponse {
@@ -12,4 +13,5 @@ public class UserCarbonLogResponse {
     private int quantity;
     private float carbon;
     private LocalDateTime recordedAt;
+    private int growthPoint;
 }

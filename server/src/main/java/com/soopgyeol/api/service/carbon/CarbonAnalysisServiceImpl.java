@@ -20,17 +20,29 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
         // GPT 분석 요청
         CarbonAnalysisResponse analysis = openAiService.analyzeCarbon(userInput);
 
+        analysis.setCategoryKorean(analysis.getCategory().getDescription());
+
         CarbonItem carbonItem = CarbonItem.builder()
                 .name(analysis.getName())
-                .carbonValue((float) analysis.getCarbonGrams())
                 .category(analysis.getCategory())
+                .carbonValue((float) analysis.getCarbonGrams())
+                .growthPoint(analysis.getGrowthPoint())
                 .explanation(analysis.getExplanation())
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        carbonItemRepository.save(carbonItem);
+        CarbonItem savedItem = carbonItemRepository.save(carbonItem);
 
-        return analysis;
+
+        return CarbonAnalysisResponse.builder()
+                .carbonItemId(savedItem.getId())
+                .name(savedItem.getName())
+                .category(savedItem.getCategory())
+                .categoryKorean(analysis.getCategoryKorean())
+                .carbonGrams(savedItem.getCarbonValue())
+                .growthPoint(savedItem.getGrowthPoint())
+                .explanation(savedItem.getExplanation())
+                .build();
     }
 
 }

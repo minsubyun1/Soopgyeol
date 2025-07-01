@@ -36,8 +36,14 @@ out/
 ### VS Code ###
 .vscode/
 
+<<<<<<< HEAD
 *.pem
 *.key
 
 *.log
 logs/
+=======
+
+### yml
+application.yml
+>>>>>>> dev

@@ -1,33 +1,50 @@
 package com.soopgyeol.api.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
-    private String name;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
 
+    private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;                        // USER, ADMIN
+
+    @Enumerated(EnumType.STRING)
+    private SocialLoginType provider;         // GOOGLE, KAKAO
+
+    private String socialId;
+
+    @Column(name = "money_balance", nullable = false)
     private int moneyBalance;
 
-    private int growthBalance;
+    @Column(name = "growth_point", nullable = false)
+    private int growthPoint;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
