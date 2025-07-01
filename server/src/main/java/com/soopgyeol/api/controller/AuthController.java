@@ -39,15 +39,39 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("url", url));
     }
 
-    // 구글 로그인 성공 후 리디렉트 → code만 프론트로 전달
+
     @GetMapping("/oauth2/google/code-log")
     public void googleAutoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:3000/oauth?code=" + code);
+        // 기존 login() 재활용
+        OAuthLoginRequest loginRequest = OAuthLoginRequest.builder()
+                .provider("GOOGLE")
+                .code(code)
+                .build();
+
+        OAuthLoginResponse loginResponse = oAuthService.login(loginRequest);
+
+        // JWT 꺼내기
+        String jwtToken = loginResponse.getJwtToken();
+
+        // 프론트로 리디렉트
+        response.sendRedirect("https://soopgyeol.netlify.app/oauth-callback?token=" + jwtToken);
     }
 
-    // 카카오 로그인 성공 후 리디렉트 → code만 프론트로 전달
+
+
+
     @GetMapping("/oauth2/kakao/code-log")
     public void kakaoAutoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:3000/oauth?code=" + code);
+        OAuthLoginRequest loginRequest = OAuthLoginRequest.builder()
+                .provider("KAKAO")
+                .code(code)
+                .build();
+
+        OAuthLoginResponse loginResponse = oAuthService.login(loginRequest);
+
+        String jwtToken = loginResponse.getJwtToken();
+
+        response.sendRedirect("https://soopgyeol.netlify.app/oauth-callback?token=" + jwtToken);
     }
+
 }
