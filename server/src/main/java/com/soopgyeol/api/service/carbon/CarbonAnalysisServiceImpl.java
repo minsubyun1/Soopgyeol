@@ -40,15 +40,6 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
 
         CarbonItem savedItem = carbonItemRepository.save(carbonItem);
 
-        // 유저의 growthPoint 증가
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.increaseGrowthPoint(analysis.getGrowthPoint());
-        userRepository.save(user);
-
-        treeStageService.updateTreeStageByGrowth(userId);
-        heroStageService.updateHeroStageByGrowth(userId);
-
         return CarbonAnalysisResponse.builder()
                 .carbonItemId(savedItem.getId())
                 .name(savedItem.getName())

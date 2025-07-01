@@ -8,6 +8,8 @@ import com.soopgyeol.api.domain.usercarbonlog.entity.UserCarbonLog;
 import com.soopgyeol.api.repository.CarbonItemRepository;
 import com.soopgyeol.api.repository.UserCarbonLogRepository;
 import com.soopgyeol.api.repository.UserRepository;
+import com.soopgyeol.api.service.stage.TreeStageService;
+import com.soopgyeol.api.service.hero.HeroStageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,51 +21,58 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserCarbonLogServiceImpl implements UserCarbonLogService{
-    private final UserRepository userRepository;
-    private final CarbonItemRepository carbonItemRepository;
-    private final UserCarbonLogRepository carbonLogRepository;
+public class UserCarbonLogServiceImpl implements UserCarbonLogService {
+        private final UserRepository userRepository;
+        private final CarbonItemRepository carbonItemRepository;
+        private final UserCarbonLogRepository carbonLogRepository;
+        private final TreeStageService treeStageService;
+        private final HeroStageService heroStageService;
 
-    @Override
-    @Transactional
-    public void saveCarbonLog(UserCarbonLogRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        @Override
+        @Transactional
+        public void saveCarbonLog(UserCarbonLogRequest request) {
+                User user = userRepository.findById(request.getUserId())
+                                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
-        CarbonItem carbonItem = carbonItemRepository.findById(request.getCarbonItemId())
-                .orElseThrow(() -> new IllegalArgumentException("탄소 품목이 존재하지 않습니다."));
+                CarbonItem carbonItem = carbonItemRepository.findById(request.getCarbonItemId())
+                                .orElseThrow(() -> new IllegalArgumentException("탄소 품목이 존재하지 않습니다."));
 
-        float totalCarbon = carbonItem.getCarbonValue() * request.getQuantity();
-        int totalGrowthPoint = carbonItem.getGrowthPoint() * request.getQuantity();
+                float totalCarbon = carbonItem.getCarbonValue() * request.getQuantity();
+                int totalGrowthPoint = carbonItem.getGrowthPoint() * request.getQuantity();
 
-        // User 엔티티의 growthPoint 갱신
-        user.setGrowthPoint(user.getGrowthPoint() + totalGrowthPoint);
-        userRepository.save(user);
+                // User 엔티티의 growthPoint 갱신
+                user.setGrowthPoint(user.getGrowthPoint() + totalGrowthPoint);
+                userRepository.save(user);
 
-        UserCarbonLog log = UserCarbonLog.builder()
-                .user(user)
-                .carbonItem(carbonItem)
-                .quantity(request.getQuantity())
-                .calculatedCarbon(totalCarbon)
-                .growthPoint(totalGrowthPoint)
-                .recordedAt(LocalDateTime.now())
-                .build();
+                // 단계 최신화 추가
+                treeStageService.updateTreeStageByGrowth(user.getId());
+                heroStageService.updateHeroStageByGrowth(user.getId());
 
-        carbonLogRepository.save(log);
-    }
+                UserCarbonLog log = UserCarbonLog.builder()
+                                .user(user)
+                                .carbonItem(carbonItem)
+                                .quantity(request.getQuantity())
+                                .calculatedCarbon(totalCarbon)
+                                .growthPoint(totalGrowthPoint)
+                                .recordedAt(LocalDateTime.now())
+                                .build();
 
-    public List<UserCarbonLogResponse> getLogsByUserIdAndDate(Long userId, LocalDate date){
-        // 날짜 기준으로 시작/끝 시간
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+                carbonLogRepository.save(log);
+        }
 
-        List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetween(userId, startOfDay, endOfDay);
+        public List<UserCarbonLogResponse> getLogsByUserIdAndDate(Long userId, LocalDate date) {
+                // 날짜 기준으로 시작/끝 시간
+                LocalDateTime startOfDay = date.atStartOfDay();
+                LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
-        return logs.stream()
-                .map(log -> UserCarbonLogResponse.builder()
-                        .product(log.getCarbonItem().getName())
-                        .growthPoint(log.getGrowthPoint())
-                        .build())
-                .toList();
-    }
+                List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetween(userId, startOfDay,
+                                endOfDay);
+
+                return logs.stream()
+                                .map(log -> UserCarbonLogResponse.builder()
+                                                .product(log.getCarbonItem().getName())
+                                                .growthPoint(log.getGrowthPoint())
+                                                .build())
+                                .toList();
+        }
 }
