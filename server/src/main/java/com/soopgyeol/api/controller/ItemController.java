@@ -5,11 +5,13 @@ import com.soopgyeol.api.domain.enums.ItemCategory;
 import com.soopgyeol.api.domain.item.dto.ItemResponse;
 import com.soopgyeol.api.domain.item.dto.DisplayResponse;
 import com.soopgyeol.api.service.item.ItemService;
+import com.soopgyeol.api.config.auth.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,34 +21,34 @@ import java.util.List;
 public class ItemController {
   private final ItemService itemService;
 
-  @GetMapping("/items/user/{userId}/category/{category}")
+  @GetMapping("/items/category/{category}")
   public ResponseEntity<ApiResponse<List<ItemResponse>>> getItemsByUserAndCategory(
-      @PathVariable Long userId,
+      @AuthenticationPrincipal CustomUserDetails userDetails,
       @PathVariable ItemCategory category) {
-    List<ItemResponse> items = itemService.getItemsByUserIdAndCategory(userId, category);
+    List<ItemResponse> items = itemService.getItemsByUserIdAndCategory(userDetails.getUserId(), category);
     return ResponseEntity.ok(new ApiResponse<>(true, "유저별 카테고리별 아이템 조회 성공", items));
   }
 
-  @GetMapping("/items/user/{userId}/displayed")
+  @GetMapping("/items/displayed")
   public ResponseEntity<ApiResponse<List<ItemResponse>>> getDisplayedItemsByUser(
-      @PathVariable Long userId) {
-    List<ItemResponse> items = itemService.getDisplayedItemsByUserId(userId);
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    List<ItemResponse> items = itemService.getDisplayedItemsByUserId(userDetails.getUserId());
     return ResponseEntity.ok(new ApiResponse<>(true, "유저의 전시 아이템 조회 성공", items));
   }
 
-  @GetMapping("/items/user/{userId}/inventory")
+  @GetMapping("/items/inventory")
   public ResponseEntity<ApiResponse<List<ItemResponse>>> getBuyedItemsByUser(
-      @PathVariable Long userId) {
-    List<ItemResponse> items = itemService.getBuyedItemsByUserId(userId);
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    List<ItemResponse> items = itemService.getBuyedItemsByUserId(userDetails.getUserId());
     return ResponseEntity.ok(new ApiResponse<>(true, "유저의 인벤토리(보유 아이템) 조회 성공", items));
   }
 
-  @PatchMapping("/items/user/{userId}/item/{itemId}/display")
+  @PatchMapping("/items/item/{itemId}/display")
   public ResponseEntity<ApiResponse<DisplayResponse>> toggleDisplay(
-      @PathVariable Long userId,
+      @AuthenticationPrincipal CustomUserDetails userDetails,
       @PathVariable Long itemId) {
     try {
-      DisplayResponse response = itemService.toggleDisplay(userId, itemId);
+      DisplayResponse response = itemService.toggleDisplay(userDetails.getUserId(), itemId);
       return ResponseEntity.ok(new ApiResponse<>(true, "전시 상태 변경 성공", response));
     } catch (IllegalStateException e) {
       return ResponseEntity.status(409).body(new ApiResponse<>(false, e.getMessage(), null));
