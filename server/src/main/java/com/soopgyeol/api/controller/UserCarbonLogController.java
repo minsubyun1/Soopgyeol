@@ -4,6 +4,7 @@ import com.soopgyeol.api.common.dto.ApiResponse;
 import com.soopgyeol.api.config.auth.CustomUserDetails;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogRequest;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogResponse;
+import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogSummaryResponse;
 import com.soopgyeol.api.service.carbonlog.UserCarbonLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,4 +39,18 @@ public class UserCarbonLogController {
         List<UserCarbonLogResponse> logs = userCarbonLogService.getLogsByUserIdAndDate(userDetails.getUserId(), date);
         return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
     }
+
+    @GetMapping("/daily/challenge")
+    public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getChallengeLogsByDate(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        UserCarbonLogSummaryResponse summaryResponse = userCarbonLogService.getChallengeLogsByUserIdAndDate(
+                userDetails.getUserId(), date
+        );
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 탄소 활동 조회 성공", summaryResponse));
+    }
+
+
 }
