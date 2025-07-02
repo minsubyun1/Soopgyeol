@@ -4,11 +4,6 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-openai:
-  api:
-    key: ${OPENAI_API_KEY}
-
   jpa:
     hibernate:
       ddl-auto: update #create
@@ -16,13 +11,16 @@ openai:
     properties:
       hibernate:
         format_sql: true
-
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+
 server:
-  port: 8080
+  port: 3005
 
 oauth:
   google:
@@ -48,5 +46,3 @@ cloud:
       static: ${CLOUD_AWS_REGION_STATIC}
     stack:
       auto: false
-
-  port: 3005
