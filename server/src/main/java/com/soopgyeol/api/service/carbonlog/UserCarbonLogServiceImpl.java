@@ -1,13 +1,13 @@
 package com.soopgyeol.api.service.carbonlog;
 
 import com.soopgyeol.api.domain.carbon.entity.CarbonItem;
+import com.soopgyeol.api.domain.challenge.entity.DailyChallenge;
 import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.domain.userChallenge.entity.UserChallenge;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogRequest;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogResponse;
 import com.soopgyeol.api.domain.usercarbonlog.entity.UserCarbonLog;
-import com.soopgyeol.api.repository.CarbonItemRepository;
-import com.soopgyeol.api.repository.UserCarbonLogRepository;
-import com.soopgyeol.api.repository.UserRepository;
+import com.soopgyeol.api.repository.*;
 import com.soopgyeol.api.service.stage.TreeStageService;
 import com.soopgyeol.api.service.hero.HeroStageService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+
+
 @Service
 @RequiredArgsConstructor
 public class UserCarbonLogServiceImpl implements UserCarbonLogService {
@@ -27,18 +29,21 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService {
         private final UserCarbonLogRepository carbonLogRepository;
         private final TreeStageService treeStageService;
         private final HeroStageService heroStageService;
+        private final DailyChallengeRepository dailyChallengeRepository;
+        private final UserChallengeRepository userChallengeRepository;
 
         @Override
         @Transactional
         public void saveCarbonLog(UserCarbonLogRequest request) {
                 User user = userRepository.findById(request.getUserId())
-                                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
                 CarbonItem carbonItem = carbonItemRepository.findById(request.getCarbonItemId())
-                                .orElseThrow(() -> new IllegalArgumentException("탄소 품목이 존재하지 않습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException("탄소 품목이 존재하지 않습니다."));
 
-                float totalCarbon = carbonItem.getCarbonValue() * request.getQuantity();
-                int totalGrowthPoint = carbonItem.getGrowthPoint() * request.getQuantity();
+                int quantity = request.getQuantity();
+                float totalCarbon = carbonItem.getCarbonValue() * quantity;
+                int totalGrowthPoint = carbonItem.getGrowthPoint() * quantity;
 
                 // User 엔티티의 growthPoint 갱신
                 user.setGrowthPoint(user.getGrowthPoint() + totalGrowthPoint);
@@ -48,14 +53,36 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService {
                 treeStageService.updateTreeStageByGrowth(user.getId());
                 heroStageService.updateHeroStageByGrowth(user.getId());
 
+
+                boolean isFromChallenge = false;
+                if (request.getDailyChallengeId() != null){
+                        isFromChallenge = true;
+
+                        // 챌린지 정보 조회
+                        DailyChallenge challenge = dailyChallengeRepository.findById(request.getDailyChallengeId())
+                                .orElseThrow(() -> new IllegalArgumentException("챌린지 정보가 존재하지 않습니다."));
+
+                        // 유저 챌린지 조회
+                        UserChallenge userChallenge = userChallengeRepository.findByUserAndDailyChallenge(user, challenge)
+                                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 챌린지 참여 정보가 없습니다."));
+
+                        // 진행도 업데이트
+                        userChallenge.increaseProgress(quantity);
+
+
+                        userChallengeRepository.save(userChallenge);
+                }
+
+
                 UserCarbonLog log = UserCarbonLog.builder()
-                                .user(user)
-                                .carbonItem(carbonItem)
-                                .quantity(request.getQuantity())
-                                .calculatedCarbon(totalCarbon)
-                                .growthPoint(totalGrowthPoint)
-                                .recordedAt(LocalDateTime.now())
-                                .build();
+                        .user(user)
+                        .carbonItem(carbonItem)
+                        .quantity(request.getQuantity())
+                        .calculatedCarbon(totalCarbon)
+                        .growthPoint(totalGrowthPoint)
+                        .recordedAt(LocalDateTime.now())
+                        .isFromChallenge(isFromChallenge)
+                        .build();
 
                 carbonLogRepository.save(log);
         }
