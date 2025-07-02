@@ -3,6 +3,7 @@ package com.soopgyeol.api.service.dailychallenge;
 import com.soopgyeol.api.domain.challenge.dto.AIChallengePromptResult;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeCompleteResponse;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeTodayResponse;
+import com.soopgyeol.api.domain.challenge.dto.UserChallengeHistoryDto;
 import com.soopgyeol.api.domain.challenge.entity.DailyChallenge;
 import com.soopgyeol.api.domain.user.User;
 import com.soopgyeol.api.domain.userChallenge.entity.UserChallenge;
@@ -13,6 +14,8 @@ import com.soopgyeol.api.service.gpt.AIChallengePromptService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -101,4 +104,19 @@ public class UserChallengeServiceImpl implements UserChallengeService {
 
         return new ChallengeCompleteResponse(reward, user.getMoneyBalance());
     }
+
+    @Transactional
+    public List<UserChallengeHistoryDto> getUserChallengeHistory(Long userId) {
+        List<UserChallenge> userChallenges = userChallengeRepository.findAllByUserIdOrderByDailyChallengeCreatedAtDesc(userId);
+
+        return userChallenges.stream()
+                .map(uc -> UserChallengeHistoryDto.builder()
+                        .title(uc.getDailyChallenge().getTitle())
+                        .createdAt(uc.getDailyChallenge().getCreatedAt().toLocalDate())  // 여기 변환
+                        .isCompleted(uc.isCompleted())
+                        .build())
+                .toList();
+
+    }
+
 }

@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,8 +37,9 @@ public class DailyChallenge {
   @Column(name = "is_active")
   private boolean isActive;
 
-  @Column(name = "created_at")
-  private LocalDate createdAt;
+  @Column(name = "created_at", updatable = false)
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 
   @Enumerated(EnumType.STRING)
   private Category category;

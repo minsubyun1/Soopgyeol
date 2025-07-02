@@ -5,12 +5,15 @@ import com.soopgyeol.api.config.auth.CustomUserDetails;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeCompleteRequest;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeCompleteResponse;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeTodayResponse;
+import com.soopgyeol.api.domain.challenge.dto.UserChallengeHistoryDto;
 import com.soopgyeol.api.service.dailychallenge.UserChallengeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/challenges")
@@ -31,4 +34,14 @@ public class DailyChallengeController {
         ChallengeCompleteResponse response = userChallengeService.completeChallenge(userDetails.getUserId(), request.getDailyChallengeId());
         return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 포인트 지급 완료", response));
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<List<UserChallengeHistoryDto>>> getChallengeHistory(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        List<UserChallengeHistoryDto> history = userChallengeService.getUserChallengeHistory(userDetails.getUserId());
+        return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 수행 이력 조회 성공", history));
+    }
+
+
 }
