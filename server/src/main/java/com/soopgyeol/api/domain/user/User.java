@@ -50,4 +50,8 @@ public class User {
     public void increaseGrowthPoint(int point) {
         this.growthPoint += point;
     }
+
+    public void addMoney(int amount) {
+        this.moneyBalance += amount;
+    }
 }
