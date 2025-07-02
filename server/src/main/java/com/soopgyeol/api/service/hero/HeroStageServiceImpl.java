@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class HeroStageServiceImpl implements HeroStageService {
-  private final UserRepository userRepository; 
+  private final UserRepository userRepository;
   private final StageRepository stageRepository;
 
   @Override
@@ -21,7 +21,13 @@ public class HeroStageServiceImpl implements HeroStageService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     Stage userStage = stageRepository.findByUser(user)
-        .orElseThrow(() -> new IllegalArgumentException("사용자의 스테이지 정보가 없습니다."));
+        .orElseGet(() -> stageRepository.save(Stage.builder()
+            .user(user)
+            .treeName("씨앗")
+            .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
+            .heroName("견습 영웅")
+            .heroUrl("https://example.com/hero-beginner.png")
+            .build()));
 
     int growth = user.getGrowthPoint();
     String heroName;
@@ -46,12 +52,18 @@ public class HeroStageServiceImpl implements HeroStageService {
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional
   public HeroStageResponse getHeroStageMessage(Long userId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     Stage userStage = stageRepository.findByUser(user)
-        .orElseThrow(() -> new IllegalArgumentException("사용자의 스테이지 정보가 없습니다"));
+        .orElseGet(() -> stageRepository.save(Stage.builder()
+            .user(user)
+            .treeName("씨앗")
+            .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
+            .heroName("견습 영웅")
+            .heroUrl("https://example.com/hero-beginner.png")
+            .build()));
 
     String heroName = userStage.getHeroName();
     String heroUrl = userStage.getHeroUrl();
