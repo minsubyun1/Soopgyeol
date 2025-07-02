@@ -7,4 +7,5 @@ public class UserCarbonLogRequest {
     private Long userId;
     private Long carbonItemId;
     private int quantity;
+    private Long dailyChallengeId;
 }

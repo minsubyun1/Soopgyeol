@@ -6,5 +6,5 @@ import com.soopgyeol.api.domain.enums.Category;
 public interface CarbonAnalysisService {
     CarbonAnalysisResponse analyzeAndSave(String userInput, Long userId);
 
-    CarbonAnalysisResponse analyzeByKeyword(String keyword, Category category);
+    CarbonAnalysisResponse analyzeByKeyword(String keyword, Category category, Long challengeId);
 }

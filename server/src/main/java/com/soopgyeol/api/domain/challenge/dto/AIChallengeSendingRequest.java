@@ -7,4 +7,5 @@ import lombok.Data;
 public class AIChallengeSendingRequest {
     String keyword;
     Category category;
+    private Long challengeId;
 }

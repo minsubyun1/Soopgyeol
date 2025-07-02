@@ -41,4 +41,11 @@ public class UserChallenge {
 
   @Column(name = "completed_at")
   private LocalDate completedAt;
+
+  public void increaseProgress(int quantity) {
+    this.progressCount += quantity;
+    if (this.progressCount >= this.dailyChallenge.getGoalCount()) {
+      this.isCompleted = true;
+    }
+  }
 }
