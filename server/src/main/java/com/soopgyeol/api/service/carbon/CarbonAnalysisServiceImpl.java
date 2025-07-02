@@ -49,7 +49,7 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
     }
 
     @Override
-    public CarbonAnalysisResponse analyzeByKeyword(String keyword, Category category) {
+    public CarbonAnalysisResponse analyzeByKeyword(String keyword, Category category, Long challengeId) {
         // 1. GPT로 분석 요청 (챌린지에서 제공한 키워드 기반)
         CarbonAnalysisResponse analysis = aiChallengeSearchService.analyzeWithFixedCategory(keyword, category);
 
@@ -78,6 +78,7 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
                 .growthPoint(savedItem.getGrowthPoint())
                 .explanation(savedItem.getExplanation())
                 .categoryImageUrl(savedItem.getCategory().getImageUrl())
+                .challengeId(challengeId)
                 .build();
     }
 }

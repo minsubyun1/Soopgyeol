@@ -20,7 +20,9 @@ public class DailyChallengeController {
     private final UserChallengeServiceImpl userChallengeService;
 
     @GetMapping("/today")
-    public ResponseEntity<ApiResponse<ChallengeTodayResponse>> getOrCreateTodayChallenge (@AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<ApiResponse<ChallengeTodayResponse>> getOrCreateTodayChallenge (
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
         ChallengeTodayResponse dto = userChallengeService.getTodayChallengeForUser(userDetails.getUserId());
         return ResponseEntity.ok(new ApiResponse<>(true, "오늘의 챌린지 조회 성공", dto));
     }

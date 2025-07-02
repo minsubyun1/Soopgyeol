@@ -33,7 +33,7 @@ public class CarbonItemController {
 
     @PostMapping("/analyze/keyword")
     public ResponseEntity<ApiResponse<CarbonAnalysisResponse>> analyzeByKeyword(@RequestBody AIChallengeSendingRequest request) {
-        CarbonAnalysisResponse response = carbonAnalysisService.analyzeByKeyword(request.getKeyword(), request.getCategory()); // 저장 없이 반환
+        CarbonAnalysisResponse response = carbonAnalysisService.analyzeByKeyword(request.getKeyword(), request.getCategory(), request.getChallengeId()); // 저장 없이 반환
         return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 기반 검색 성공", response));
     }
 }
