@@ -3,6 +3,7 @@ package com.soopgyeol.api.controller;
 import com.soopgyeol.api.common.dto.ApiResponse;
 import com.soopgyeol.api.domain.carbon.dto.CarbonAnalysisRequest;
 import com.soopgyeol.api.domain.carbon.dto.CarbonAnalysisResponse;
+import com.soopgyeol.api.domain.challenge.dto.AIChallengeSendingRequest;
 import com.soopgyeol.api.service.carbon.CarbonAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,12 @@ public class CarbonItemController {
         Long userId = userDetails.getUserId();
         CarbonAnalysisResponse response = carbonAnalysisService.analyzeAndSave(request.getUserInput(), userId);
         return ResponseEntity.ok(new ApiResponse<>(true, "검색 성공", response));
+    }
+
+
+    @PostMapping("/analyze/keyword")
+    public ResponseEntity<ApiResponse<CarbonAnalysisResponse>> analyzeByKeyword(@RequestBody AIChallengeSendingRequest request) {
+        CarbonAnalysisResponse response = carbonAnalysisService.analyzeByKeyword(request.getKeyword(), request.getCategory()); // 저장 없이 반환
+        return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 기반 검색 성공", response));
     }
 }
