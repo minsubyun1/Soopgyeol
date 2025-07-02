@@ -53,8 +53,9 @@ public class AuthController {
         // JWT 꺼내기
         String jwtToken = loginResponse.getJwtToken();
 
-        // 프론트로 리디렉트
-        response.sendRedirect("https://soopgyeol.netlify.app/oauth-callback?token=" + jwtToken);
+        // 앱용 딥링크로 변경
+        response.sendRedirect("soopgyeol://oauth-callback/google?token=" + jwtToken);
+
     }
 
 
@@ -71,7 +72,8 @@ public class AuthController {
 
         String jwtToken = loginResponse.getJwtToken();
 
-        response.sendRedirect("https://soopgyeol.netlify.app/oauth-callback?token=" + jwtToken);
+        // 앱 용 딥링크로 변경
+        response.sendRedirect("soopgyeol://oauth-callback/kakao?token=" + jwtToken);
     }
 
 }
