@@ -1,6 +1,7 @@
 package com.soopgyeol.api.service.dailychallenge;
 
 import com.soopgyeol.api.domain.challenge.dto.AIChallengePromptResult;
+import com.soopgyeol.api.domain.challenge.dto.ChallengeCompleteResponse;
 import com.soopgyeol.api.domain.challenge.dto.ChallengeTodayResponse;
 import com.soopgyeol.api.domain.challenge.entity.DailyChallenge;
 import com.soopgyeol.api.domain.user.User;
@@ -72,5 +73,32 @@ public class UserChallengeServiceImpl implements UserChallengeService {
                 .isCompleted(userChallenge.isCompleted())
                 .categoryImageUrl(dailyChallenge.getCategory().getImageUrl())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public ChallengeCompleteResponse completeChallenge(Long userId, Long dailyChallengeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        DailyChallenge dailyChallenge = dailyChallengeRepository.findById(dailyChallengeId)
+                .orElseThrow(() -> new IllegalArgumentException("챌린지가 존재하지 않습니다."));
+
+        UserChallenge userChallenge = userChallengeRepository.findByUserAndDailyChallenge(user, dailyChallenge)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 챌린지 기록이 없습니다."));
+
+        if (!userChallenge.isCompleted()) {
+            throw new IllegalArgumentException("아직 챌린지를 완료하지 않았습니다.");
+        }
+
+        if (userChallenge.isRewardReceived()) {
+            throw new IllegalArgumentException("이미 보상을 받은 챌린지입니다.");
+        }
+
+        int reward = dailyChallenge.getRewardMoney();
+        user.addMoney(reward);
+        userChallenge.setRewardReceived(true);
+
+        return new ChallengeCompleteResponse(reward, user.getMoneyBalance());
     }
 }

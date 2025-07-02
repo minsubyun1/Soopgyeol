@@ -42,6 +42,14 @@ public class UserChallenge {
   @Column(name = "completed_at")
   private LocalDate completedAt;
 
+  @Builder.Default
+  @Column(name = "reward_received", nullable = false)
+  private boolean rewardReceived = false;
+
+  public void setRewardReceived(boolean rewardReceived) {
+    this.rewardReceived = rewardReceived;
+  }
+
   public void increaseProgress(int quantity) {
     this.progressCount += quantity;
     if (this.progressCount >= this.dailyChallenge.getGoalCount()) {
