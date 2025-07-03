@@ -19,7 +19,7 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
     private final AIChallengeSearchService aiChallengeSearchService;
 
     @Override
-    public CarbonAnalysisResponse analyzeAndSave(String userInput, Long userId) {
+    public CarbonAnalysisResponse analyzeAndSave(String userInput) {
         // GPT 분석 요청
         CarbonAnalysisResponse analysis = openAiService.analyzeCarbon(userInput);
 

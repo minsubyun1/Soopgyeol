@@ -8,5 +8,4 @@ public class UserCarbonLogRequest {
     private Long carbonItemId;
     private int quantity;
     private Long dailyChallengeId;
-    private boolean isFromChallenge;
 }

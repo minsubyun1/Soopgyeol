@@ -23,10 +23,8 @@ public class CarbonItemController {
 
     @PostMapping("/analyze")
     public ResponseEntity<ApiResponse<CarbonAnalysisResponse>> analyzeCarbon(
-            @RequestBody CarbonAnalysisRequest request,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long userId = userDetails.getUserId();
-        CarbonAnalysisResponse response = carbonAnalysisService.analyzeAndSave(request.getUserInput(), userId);
+            @RequestBody CarbonAnalysisRequest request) {
+        CarbonAnalysisResponse response = carbonAnalysisService.analyzeAndSave(request.getUserInput());
         return ResponseEntity.ok(new ApiResponse<>(true, "검색 성공", response));
     }
 
