@@ -25,8 +25,8 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("견습 영웅")
-            .heroUrl("https://example.com/hero-beginner.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
     int growth = user.getGrowthPoint();
@@ -39,7 +39,7 @@ public class TreeStageServiceImpl implements TreeStageService {
       treeName = "새싹";
       treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/sappling.png";
     } else if (growth <= 700) {
-      treeName = "어린 나무";
+      treeName = "작은 나무";
       treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/littletree.png";
     } else {
       treeName = "나무";
@@ -61,8 +61,8 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("견습 영웅")
-            .heroUrl("https://example.com/hero-beginner.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
     String treeName = userStage.getTreeName();
