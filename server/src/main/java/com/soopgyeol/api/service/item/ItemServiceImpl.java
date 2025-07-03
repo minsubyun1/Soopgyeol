@@ -82,6 +82,30 @@ public class ItemServiceImpl implements ItemService {
   }
 
   @Override
+  public List<ItemResponse> getBuyedItemsByUserIdAndCategory(Long userId, ItemCategory category) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    return inventoryRepository.findByUserAndIsBuyedTrue(user).stream()
+        .filter(inventory -> inventory.getItem().getCategory() == category)
+        .map(inventory -> {
+          Item item = inventory.getItem();
+          boolean displayed = inventory.isDisplayed();
+          boolean available = user.getMoneyBalance() >= item.getPrice();
+          return ItemResponse.builder()
+              .id(item.getId())
+              .name(item.getName())
+              .price(item.getPrice())
+              .url(item.getUrl())
+              .category(item.getCategory())
+              .display(displayed)
+              .available(available)
+              .isBuyed(true)
+              .build();
+        })
+        .collect(Collectors.toList());
+  }
+
+  @Override
   public DisplayResponse toggleDisplay(Long userId, Long itemId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
