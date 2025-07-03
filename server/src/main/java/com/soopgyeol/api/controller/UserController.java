@@ -2,6 +2,8 @@ package com.soopgyeol.api.controller;
 
 import com.soopgyeol.api.common.dto.NicknameUpdateRequest;
 import com.soopgyeol.api.common.dto.NicknameUpdateResponse;
+import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.domain.user.dto.UserInfoResponse;
 import com.soopgyeol.api.service.UserService;
 import com.soopgyeol.api.service.jwt.JwtProvider;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,5 +32,25 @@ public class UserController {
         String updatedNickname = userService.updateNickname(userId, request.getNickname());
         return ResponseEntity.ok(new NicknameUpdateResponse(updatedNickname));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserInfoResponse> getMyInfo(
+            @RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.replace("Bearer ", "");
+        Long userId = jwtProvider.getUserId(token);
+
+        User user = userService.getUserById(userId);
+
+        UserInfoResponse response = new UserInfoResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }
 
