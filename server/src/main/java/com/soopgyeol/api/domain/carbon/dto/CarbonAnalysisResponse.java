@@ -18,4 +18,6 @@ public class CarbonAnalysisResponse {
     private String categoryKorean;   // 카테고리(한글)
     private int growthPoint; // 단위당 성장 점수
     private String explanation;      // 왜 이 정도 탄소가 나왔는지 설명
+    private String categoryImageUrl;
+    private Long challengeId; // 챌린지 기반 검색인 경우만
 }

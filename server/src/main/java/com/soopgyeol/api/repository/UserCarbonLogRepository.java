@@ -15,5 +15,7 @@ public interface UserCarbonLogRepository extends JpaRepository<UserCarbonLog, Lo
     List<UserCarbonLog> findByUserId(Long userId);
 
     List <UserCarbonLog> findByUserIdAndRecordedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
+    List<UserCarbonLog> findByUserIdAndRecordedAtBetweenAndIsFromChallengeTrue(Long userId, LocalDateTime start, LocalDateTime end);
+
 
 }

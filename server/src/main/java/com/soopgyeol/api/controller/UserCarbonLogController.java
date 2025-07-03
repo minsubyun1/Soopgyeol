@@ -1,15 +1,17 @@
 package com.soopgyeol.api.controller;
 
 import com.soopgyeol.api.common.dto.ApiResponse;
-import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.config.auth.CustomUserDetails;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogRequest;
 import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogResponse;
+import com.soopgyeol.api.domain.usercarbonlog.dto.UserCarbonLogSummaryResponse;
 import com.soopgyeol.api.service.carbonlog.UserCarbonLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,22 +27,35 @@ public class UserCarbonLogController {
 
     @Operation(summary = "탄소 소비 기록 저장", description = "사용자가 품목을 저장하면 소비 기록이 저장됩니다.")
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> saveLog(@RequestBody UserCarbonLogRequest request) {
+    public ResponseEntity<ApiResponse<String>> saveLog(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody UserCarbonLogRequest request) {
+        request.setUserId(userDetails.getUserId());
         userCarbonLogService.saveCarbonLog(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "탄소 소비 기록 저장 완료", null));
     }
-    @Operation(summary = "탄소 소비 기록 조회", description = "사용자의 모든 탄소 소비 기록을 조회합니다.")
-    @GetMapping ResponseEntity<ApiResponse<List<UserCarbonLogResponse>>> getLogs(@RequestParam Long userId){
-        List<UserCarbonLogResponse> logs = userCarbonLogService.getLogsByUserId(userId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
-    }
+
 
     @GetMapping("/daily")
     public ResponseEntity<ApiResponse<List<UserCarbonLogResponse>>> getLogsByDate(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        List<UserCarbonLogResponse> logs = userCarbonLogService.getLogsByUserIdAndDate(userId, date);
+        List<UserCarbonLogResponse> logs = userCarbonLogService.getLogsByUserIdAndDate(userDetails.getUserId(), date);
         return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
     }
+
+    @GetMapping("/daily/challenge")
+    public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getChallengeLogsByDate(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        UserCarbonLogSummaryResponse summaryResponse = userCarbonLogService.getChallengeLogsByUserIdAndDate(
+                userDetails.getUserId(), date
+        );
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 탄소 활동 조회 성공", summaryResponse));
+    }
+
+
 }

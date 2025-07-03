@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class HeroStageResponse {
   private String heroName;
   private String heroUrl;
-  private String message;
 }

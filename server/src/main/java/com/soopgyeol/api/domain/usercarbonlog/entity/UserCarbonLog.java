@@ -35,10 +35,6 @@ public class UserCarbonLog {
     @JoinColumn(name = "carbon_item_id")
     private CarbonItem carbonItem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "daily_challenge_id", nullable = true)
-    private DailyChallenge dailyChallenge;
-
     // 소비 수량
     private int quantity;
 
@@ -53,4 +49,6 @@ public class UserCarbonLog {
     @Column(nullable = false)
     private LocalDateTime recordedAt;
 
+    @Column(nullable = false)
+    private boolean isFromChallenge;
 }

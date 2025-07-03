@@ -1,5 +1,6 @@
 package com.soopgyeol.api.service.jwt;
 
+import com.soopgyeol.api.config.auth.CustomUserDetails;
 import com.soopgyeol.api.domain.user.Role;
 import com.soopgyeol.api.domain.user.User;
 import com.soopgyeol.api.repository.UserRepository;
@@ -39,17 +40,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
         // carbon 관련 경로만 임시 인증 우회
-        if (path.startsWith("/carbon")) {
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            "test@example.com", // principal (이메일 또는 유저 객체)
-                            null,
-                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                    );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            chain.doFilter(request, response);
-            return;
-        }
+//        if (path.startsWith("/carbon")) {
+//            CustomUserDetails testUserDetails = new CustomUserDetails(
+//                    0L,
+//                    "test@example.com",
+//                    "",
+//                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
+//            );
+//
+//            UsernamePasswordAuthenticationToken authentication =
+//                    new UsernamePasswordAuthenticationToken(
+//                            testUserDetails,
+//                            null,
+//                            testUserDetails.getAuthorities()
+//                    );
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -68,12 +79,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("탈퇴한 사용자"));
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            user,                       // Principal
-                            null,                       // Credentials
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role.name()))
-                    );
+            CustomUserDetails userDetails = new CustomUserDetails(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role.name()))
+            );
+
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    userDetails, // Principal
+                    null,
+                    userDetails.getAuthorities()
+            );
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 

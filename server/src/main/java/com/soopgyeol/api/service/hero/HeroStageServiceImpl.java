@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class HeroStageServiceImpl implements HeroStageService {
-  private final UserRepository userRepository; 
+  private final UserRepository userRepository;
   private final StageRepository stageRepository;
 
   @Override
@@ -21,23 +21,29 @@ public class HeroStageServiceImpl implements HeroStageService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     Stage userStage = stageRepository.findByUser(user)
-        .orElseThrow(() -> new IllegalArgumentException("사용자의 스테이지 정보가 없습니다."));
+        .orElseGet(() -> stageRepository.save(Stage.builder()
+            .user(user)
+            .treeName("씨앗")
+            .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
+            .build()));
 
     int growth = user.getGrowthPoint();
     String heroName;
     String heroUrl;
-    if (growth <= 100) { // 추후 사진 확정 시 수정 예정
-      heroName = "견습 영웅";
-      heroUrl = "https://example.com/hero-beginner.png";
+    if (growth <= 100) {
+      heroName = "Lv1. 새싹지기";
+      heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png";
     } else if (growth <= 300) {
-      heroName = "신입 영웅";
-      heroUrl = "https://example.com/hero-novice.png";
+      heroName = "Lv2. 줄임꾼";
+      heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herosappling.png";
     } else if (growth <= 700) {
-      heroName = "숙련 영웅";
-      heroUrl = "https://example.com/hero-skilled.png";
+      heroName = "Lv3. 탐험가";
+      heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herolittletree.png";
     } else {
-      heroName = "전설 영웅";
-      heroUrl = "https://example.com/hero-legend.png";
+      heroName = "Lv4. 지구지킴이";
+      heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herotree.png";
     }
 
     userStage.setHeroName(heroName);
@@ -46,12 +52,18 @@ public class HeroStageServiceImpl implements HeroStageService {
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional
   public HeroStageResponse getHeroStageMessage(Long userId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     Stage userStage = stageRepository.findByUser(user)
-        .orElseThrow(() -> new IllegalArgumentException("사용자의 스테이지 정보가 없습니다"));
+        .orElseGet(() -> stageRepository.save(Stage.builder()
+            .user(user)
+            .treeName("씨앗")
+            .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
+            .build()));
 
     String heroName = userStage.getHeroName();
     String heroUrl = userStage.getHeroUrl();
@@ -59,28 +71,9 @@ public class HeroStageServiceImpl implements HeroStageService {
       throw new IllegalArgumentException("사용자의 영웅 단계 정보가 없습니다");
     }
 
-    String message;
-    switch (heroName) {
-      case "견습 영웅":
-        message = "이제 막 모험을 시작한 견습 영웅입니다!";
-        break;
-      case "신입 영웅":
-        message = "조금씩 성장하는 신입 영웅입니다!";
-        break;
-      case "숙련 영웅":
-        message = "경험이 쌓인 숙련 영웅입니다!";
-        break;
-      case "전설 영웅":
-        message = "전설이 된 영웅입니다! 최고예요!";
-        break;
-      default:
-        message = heroName + " 단계입니다!";
-    }
-
     return HeroStageResponse.builder()
         .heroName(heroName)
         .heroUrl(heroUrl)
-        .message(message)
         .build();
   }
 }
