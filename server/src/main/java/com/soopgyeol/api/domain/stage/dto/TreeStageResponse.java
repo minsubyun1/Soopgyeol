@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class TreeStageResponse {
   private String treeName;
   private String treeUrl;
-  private String message;
 }

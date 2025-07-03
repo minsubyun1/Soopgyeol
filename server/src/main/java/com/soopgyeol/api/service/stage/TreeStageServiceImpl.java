@@ -25,8 +25,8 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("견습 영웅")
-            .heroUrl("https://example.com/hero-beginner.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
     int growth = user.getGrowthPoint();
@@ -39,7 +39,7 @@ public class TreeStageServiceImpl implements TreeStageService {
       treeName = "새싹";
       treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/sappling.png";
     } else if (growth <= 700) {
-      treeName = "어린 나무";
+      treeName = "작은 나무";
       treeUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/littletree.png";
     } else {
       treeName = "나무";
@@ -61,8 +61,8 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("견습 영웅")
-            .heroUrl("https://example.com/hero-beginner.png")
+            .heroName("Lv1. 새싹지기")
+            .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
     String treeName = userStage.getTreeName();
@@ -71,28 +71,9 @@ public class TreeStageServiceImpl implements TreeStageService {
       throw new IllegalArgumentException("사용자의 나무 단계 정보가 없습니다");
     }
 
-    String message;
-    switch (treeName) {
-      case "씨앗":
-        message = "씨앗 단계군요! 곧 싹이 돋을 거예요.";
-        break;
-      case "새싹":
-        message = "새싹 단계입니다! 조금만 더 성장해봐요.";
-        break;
-      case "어린 나무":
-        message = "어린 나무 단계입니다! 멋져요.";
-        break;
-      case "나무":
-        message = "나무 단계입니다! 최고예요!";
-        break;
-      default:
-        message = treeName + " 단계입니다!";
-    }
-
     return TreeStageResponse.builder()
         .treeName(treeName)
         .treeUrl(treeUrl)
-        .message(message)
         .build();
   }
 }
