@@ -29,7 +29,8 @@ public class JwtProvider {
         this.secret = dotenv.get("JWT_SECRET");
     }
 
-    private final long ACCESS_VALIDITY = 1000 * 60 * 60 * 2;   // 2h
+    private final long ACCESS_VALIDITY = 1000L * 60 * 60 * 24 * 7; // 7일
+
 
 
     private SecretKey getSigningKey() {

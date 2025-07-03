@@ -25,7 +25,7 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("Lv1. 새싹지기")
+            .heroName("Lv.1 새싹지기")
             .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
@@ -61,7 +61,7 @@ public class TreeStageServiceImpl implements TreeStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("Lv1. 새싹지기")
+            .heroName("Lv.1 새싹지기")
             .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 

@@ -12,5 +12,7 @@ public interface ItemService {
 
   List<ItemResponse> getBuyedItemsByUserId(Long userId);
 
+  List<ItemResponse> getBuyedItemsByUserIdAndCategory(Long userId, ItemCategory category);
+
   DisplayResponse toggleDisplay(Long userId, Long itemId);
 }

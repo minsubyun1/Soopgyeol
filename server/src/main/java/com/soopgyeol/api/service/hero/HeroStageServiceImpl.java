@@ -25,7 +25,7 @@ public class HeroStageServiceImpl implements HeroStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("Lv1. 새싹지기")
+            .heroName("Lv.1 새싹지기")
             .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
@@ -33,16 +33,16 @@ public class HeroStageServiceImpl implements HeroStageService {
     String heroName;
     String heroUrl;
     if (growth <= 100) {
-      heroName = "Lv1. 새싹지기";
+      heroName = "Lv.1 새싹지기";
       heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png";
     } else if (growth <= 300) {
-      heroName = "Lv2. 줄임꾼";
+      heroName = "Lv.2 줄임꾼";
       heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herosappling.png";
     } else if (growth <= 700) {
-      heroName = "Lv3. 탐험가";
+      heroName = "Lv.3 탐험가";
       heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herolittletree.png";
     } else {
-      heroName = "Lv4. 지구지킴이";
+      heroName = "Lv.4 지구지킴이";
       heroUrl = "https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/herotree.png";
     }
 
@@ -61,7 +61,7 @@ public class HeroStageServiceImpl implements HeroStageService {
             .user(user)
             .treeName("씨앗")
             .treeUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/seed.png")
-            .heroName("Lv1. 새싹지기")
+            .heroName("Lv.1 새싹지기")
             .heroUrl("https://soopgyeolbucket.s3.ap-northeast-2.amazonaws.com/hero/heroseed.png")
             .build()));
 
