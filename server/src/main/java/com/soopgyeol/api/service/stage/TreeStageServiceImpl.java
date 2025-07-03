@@ -71,28 +71,9 @@ public class TreeStageServiceImpl implements TreeStageService {
       throw new IllegalArgumentException("사용자의 나무 단계 정보가 없습니다");
     }
 
-    String message;
-    switch (treeName) {
-      case "씨앗":
-        message = "씨앗 단계군요! 곧 싹이 돋을 거예요.";
-        break;
-      case "새싹":
-        message = "새싹 단계입니다! 조금만 더 성장해봐요.";
-        break;
-      case "어린 나무":
-        message = "어린 나무 단계입니다! 멋져요.";
-        break;
-      case "나무":
-        message = "나무 단계입니다! 최고예요!";
-        break;
-      default:
-        message = treeName + " 단계입니다!";
-    }
-
     return TreeStageResponse.builder()
         .treeName(treeName)
         .treeUrl(treeUrl)
-        .message(message)
         .build();
   }
 }
