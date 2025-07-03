@@ -15,5 +15,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
   List<Inventory> findByUserAndIsBuyedTrue(User user);
 
   List<Inventory> findByUserAndItem(User user, Item item);
-}
 
+  void deleteByUser(User user);
+}

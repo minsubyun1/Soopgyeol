@@ -25,7 +25,6 @@ public class UserController {
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody NicknameUpdateRequest request) {
 
-
         String token = authorizationHeader.replace("Bearer ", "");
         Long userId = jwtProvider.getUserId(token);
 
@@ -45,12 +44,29 @@ public class UserController {
         UserInfoResponse response = new UserInfoResponse(
                 user.getId(),
                 user.getEmail(),
-                user.getNickname()
-        );
+                user.getNickname());
 
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/me")
+    public ResponseEntity<?> deleteMe(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+        Long userId = jwtProvider.getUserId(token);
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.ok().body(
+                    java.util.Map.of(
+                            "success", true,
+                            "message", "회원 탈퇴 성공",
+                            "data", userId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(
+                    java.util.Map.of(
+                            "success", false,
+                            "message", e.getMessage(),
+                            "data", null));
+        }
+    }
 
 }
-

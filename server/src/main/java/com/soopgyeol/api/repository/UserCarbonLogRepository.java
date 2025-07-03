@@ -11,8 +11,11 @@ import java.util.List;
 
 public interface UserCarbonLogRepository extends JpaRepository<UserCarbonLog, Long> {
 
-    List <UserCarbonLog> findByUserIdAndRecordedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
-    List<UserCarbonLog> findByUserIdAndRecordedAtBetweenAndIsFromChallengeTrue(Long userId, LocalDateTime start, LocalDateTime end);
+    List<UserCarbonLog> findByUserIdAndRecordedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
+    List<UserCarbonLog> findByUserIdAndRecordedAtBetweenAndIsFromChallengeTrue(Long userId, LocalDateTime start,
+            LocalDateTime end);
+
+    void deleteByUserId(Long userId);
 
 }
