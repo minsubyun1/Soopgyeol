@@ -36,11 +36,12 @@ public class ItemController {
     return ResponseEntity.ok(new ApiResponse<>(true, "유저의 전시 아이템 조회 성공", items));
   }
 
-  @GetMapping("/items/inventory")
-  public ResponseEntity<ApiResponse<List<ItemResponse>>> getBuyedItemsByUser(
-      @AuthenticationPrincipal CustomUserDetails userDetails) {
-    List<ItemResponse> items = itemService.getBuyedItemsByUserId(userDetails.getUserId());
-    return ResponseEntity.ok(new ApiResponse<>(true, "유저의 인벤토리(보유 아이템) 조회 성공", items));
+  @GetMapping("/items/inventory/category/{category}")
+  public ResponseEntity<ApiResponse<List<ItemResponse>>> getBuyedItemsByUserAndCategory(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @PathVariable ItemCategory category) {
+    List<ItemResponse> items = itemService.getBuyedItemsByUserIdAndCategory(userDetails.getUserId(), category);
+    return ResponseEntity.ok(new ApiResponse<>(true, "유저의 카테고리별 인벤토리(보유 아이템) 조회 성공", items));
   }
 
   @PatchMapping("/items/item/{itemId}/display")
