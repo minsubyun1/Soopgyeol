@@ -21,4 +21,10 @@ public class UserService {
         userRepository.save(user);
         return nickname;
     }
+    @Transactional(readOnly = true)
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 }
