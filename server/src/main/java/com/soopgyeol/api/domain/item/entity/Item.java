@@ -27,4 +27,8 @@ public class Item {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private ItemCategory category;
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
 }
