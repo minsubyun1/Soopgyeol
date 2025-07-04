@@ -54,4 +54,6 @@ public class User {
     public void addMoney(int amount) {
         this.moneyBalance += amount;
     }
+
+    public void subMoney(int money) {this.moneyBalance -= money; }
 }
