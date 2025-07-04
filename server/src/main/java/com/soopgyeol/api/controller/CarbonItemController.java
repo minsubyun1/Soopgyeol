@@ -34,6 +34,7 @@ public class CarbonItemController {
     }
 
 
+    @Operation(summary = "챌린지 키워드 기반 탄소 분석", description = "챌린지 키워드를 기반으로 GPT가 탄소 분석 및 저장을 수행합니다.")
     @PostMapping("/analyze/keyword")
     public ResponseEntity<ApiResponse<CarbonAnalysisResponse>> analyzeByKeyword(@RequestBody AIChallengeSendingRequest request) {
         CarbonAnalysisResponse response = carbonAnalysisService.analyzeByKeyword(request.getKeyword(), request.getCategory(), request.getChallengeId()); // 저장 없이 반환

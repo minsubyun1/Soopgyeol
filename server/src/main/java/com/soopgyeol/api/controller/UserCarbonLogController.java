@@ -35,7 +35,7 @@ public class UserCarbonLogController {
         return ResponseEntity.ok(new ApiResponse<>(true, "탄소 소비 기록 저장 완료", null));
     }
 
-
+    @Operation(summary = "날짜별 소비 기록 조회", description = "사용자가 지정한 날짜의 탄소 기록을 조회합니다.")
     @GetMapping("/daily")
     public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getLogsByDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -45,6 +45,7 @@ public class UserCarbonLogController {
         return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
     }
 
+    @Operation(summary = "날짜별 챌린지 소비 기록 조회", description = "사용자가 지정한 날짜의 챌린지 기반 탄소 기록을 조회합니다.")
     @GetMapping("/daily/challenge")
     public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getChallengeLogsByDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,

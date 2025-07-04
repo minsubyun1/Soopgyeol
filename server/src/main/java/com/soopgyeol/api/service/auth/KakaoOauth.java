@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 
 @Component
-@Service
 @RequiredArgsConstructor
 public class KakaoOauth implements SocialOauth {
 

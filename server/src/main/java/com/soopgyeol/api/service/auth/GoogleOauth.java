@@ -22,7 +22,6 @@ import java.io.IOException;
 
 
 @Component
-@Service
 @AllArgsConstructor
 public class GoogleOauth implements SocialOauth {
 
