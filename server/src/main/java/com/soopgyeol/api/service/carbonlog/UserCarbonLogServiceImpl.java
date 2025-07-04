@@ -88,20 +88,31 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService {
                 carbonLogRepository.save(log);
         }
 
-        public List<UserCarbonLogResponse> getLogsByUserIdAndDate(Long userId, LocalDate date) {
+        public UserCarbonLogSummaryResponse getLogsByUserIdAndDate(Long userId, LocalDate date) {
                 // 날짜 기준으로 시작/끝 시간
                 LocalDateTime startOfDay = date.atStartOfDay();
                 LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
+
+
                 List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetween(userId, startOfDay,
                                 endOfDay);
 
-                return logs.stream()
-                                .map(log -> UserCarbonLogResponse.builder()
-                                                .product(log.getCarbonItem().getName())
-                                                .growthPoint(log.getGrowthPoint())
-                                                .build())
-                                .toList();
+                int totalGrowthPoint = logs.stream()
+                        .mapToInt(UserCarbonLog::getGrowthPoint)
+                        .sum();
+
+                List<UserCarbonLogResponse> logDtos = logs.stream()
+                        .map(log -> UserCarbonLogResponse.builder()
+                                .product(log.getCarbonItem().getName())
+                                .growthPoint(log.getGrowthPoint())
+                                .build())
+                        .toList();
+
+                return UserCarbonLogSummaryResponse.builder()
+                        .logs(logDtos)
+                        .totalGrowthPoint(totalGrowthPoint)
+                        .build();
         }
 
         public UserCarbonLogSummaryResponse getChallengeLogsByUserIdAndDate(Long userId, LocalDate date) {

@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface StageRepository extends JpaRepository<Stage, Long> {
   Optional<Stage> findByUser(User user);
+
+  void deleteByUser(User user);
 }

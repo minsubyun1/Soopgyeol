@@ -37,11 +37,11 @@ public class UserCarbonLogController {
 
 
     @GetMapping("/daily")
-    public ResponseEntity<ApiResponse<List<UserCarbonLogResponse>>> getLogsByDate(
+    public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getLogsByDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        List<UserCarbonLogResponse> logs = userCarbonLogService.getLogsByUserIdAndDate(userDetails.getUserId(), date);
+        UserCarbonLogSummaryResponse logs = userCarbonLogService.getLogsByUserIdAndDate(userDetails.getUserId(), date);
         return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
     }
 
