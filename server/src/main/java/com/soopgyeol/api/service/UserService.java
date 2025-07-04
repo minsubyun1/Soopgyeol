@@ -1,6 +1,7 @@
 package com.soopgyeol.api.service;
 
 import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.domain.user.dto.MoneyBalanceResponse;
 import com.soopgyeol.api.repository.UserRepository;
 import com.soopgyeol.api.repository.StageRepository;
 import com.soopgyeol.api.repository.InventoryRepository;
@@ -44,6 +45,13 @@ public class UserService {
         userChallengeRepository.deleteByUser(user);
         userCarbonLogRepository.deleteByUserId(userId);
         userRepository.delete(user);
+    }
+
+    public MoneyBalanceResponse getMoneyBalance(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        return new MoneyBalanceResponse(user.getMoneyBalance());
     }
 
 }
