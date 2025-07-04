@@ -1,8 +1,11 @@
 package com.soopgyeol.api.controller;
 
+import com.soopgyeol.api.common.dto.ApiResponse;
 import com.soopgyeol.api.common.dto.NicknameUpdateRequest;
 import com.soopgyeol.api.common.dto.NicknameUpdateResponse;
+import com.soopgyeol.api.config.auth.CustomUserDetails;
 import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.domain.user.dto.MoneyBalanceResponse;
 import com.soopgyeol.api.domain.user.dto.UserInfoResponse;
 import com.soopgyeol.api.service.UserService;
 import com.soopgyeol.api.service.jwt.JwtProvider;
@@ -67,6 +70,14 @@ public class UserController {
                             "message", e.getMessage(),
                             "data", null));
         }
+    }
+
+    @GetMapping("/money-balance")
+    public ResponseEntity<ApiResponse<MoneyBalanceResponse>> getMoneyBalance (
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        MoneyBalanceResponse response = userService.getMoneyBalance(userDetails.getUserId());
+        return ResponseEntity.ok(new ApiResponse<>(true, "회원 잔액 조회 성공", response));
     }
 
 }
