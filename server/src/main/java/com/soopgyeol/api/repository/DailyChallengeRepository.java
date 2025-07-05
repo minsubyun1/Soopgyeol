@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface DailyChallengeRepository extends JpaRepository<DailyChallenge, Long> {
-    Optional<DailyChallenge> findByIsActiveTrue();
+    Optional<DailyChallenge> findByCreatedAtAndIsActive(LocalDate createdAt, boolean isActive);
 
     @Modifying
     @Query("UPDATE DailyChallenge dc SET dc.isActive = false WHERE dc.isActive = true")
