@@ -1,9 +1,2 @@
 .idea/
 *.iml
-### yml ###
-application.yml
-
-
-.env
-
-.vscode
