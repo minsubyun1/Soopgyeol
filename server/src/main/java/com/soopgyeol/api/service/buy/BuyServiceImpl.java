@@ -2,8 +2,10 @@ package com.soopgyeol.api.service.buy;
 
 import com.soopgyeol.api.domain.buy.dto.BuyResult;
 import com.soopgyeol.api.domain.buy.entity.Purchase;
+import com.soopgyeol.api.domain.item.entity.Inventory;
 import com.soopgyeol.api.domain.item.entity.Item;
 import com.soopgyeol.api.domain.user.User;
+import com.soopgyeol.api.repository.InventoryRepository;
 import com.soopgyeol.api.repository.ItemRepository;
 import com.soopgyeol.api.repository.PurchaseRepository;
 import com.soopgyeol.api.repository.UserRepository;
@@ -12,19 +14,24 @@ import com.soopgyeol.api.common.exception.ItemAlreadyOwnedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class BuyServiceImpl implements BuyService {
 
     private final ItemRepository itemRepository;
     private final PurchaseRepository purchaseRepository;
     private final UserRepository userRepository;
+    private final InventoryRepository inventoryRepository;
 
     public BuyServiceImpl(ItemRepository itemRepository,
                           PurchaseRepository purchaseRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          InventoryRepository inventoryRepository) {
         this.itemRepository = itemRepository;
         this.purchaseRepository = purchaseRepository;
         this.userRepository = userRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Transactional
@@ -60,6 +67,15 @@ public class BuyServiceImpl implements BuyService {
                 .build();
 
         purchaseRepository.save(purchase);
+
+        Inventory inventory = Inventory.builder()
+                .user(user)
+                .item(item)
+                .isBuyed(true)
+                .isDisplayed(false) // 기본값, 필요에 따라 true로
+                .buyAt(LocalDateTime.now())
+                .build();
+        inventoryRepository.save(inventory);
 
         return BuyResult.builder()
                 .itemId(item.getId())
