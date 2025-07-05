@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,8 +34,10 @@ public class UserChallengeServiceImpl implements UserChallengeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
 
+        LocalDate today = LocalDate.now();
+
         // 오늘의 챌린지 조회 or GPT로 생성
-        DailyChallenge dailyChallenge = dailyChallengeRepository.findByIsActiveTrue()
+        DailyChallenge dailyChallenge = dailyChallengeRepository.findByCreatedAtAndIsActive(today, true)
                 .orElseGet(() -> {
                     // 이전 챌린지 비활성화
                     dailyChallengeRepository.deactivateAll();
@@ -47,6 +50,7 @@ public class UserChallengeServiceImpl implements UserChallengeService {
                             .rewardMoney(gptResponse.getRewardMoney())
                             .carbonKeyword(gptResponse.getCarbonKeyword())
                             .category(gptResponse.getCategory())
+                            .createdAt(today)
                             .isActive(true)
                             .build();
                     return dailyChallengeRepository.save(newChallenge);
@@ -112,7 +116,7 @@ public class UserChallengeServiceImpl implements UserChallengeService {
         return userChallenges.stream()
                 .map(uc -> UserChallengeHistoryDto.builder()
                         .title(uc.getDailyChallenge().getTitle())
-                        .createdAt(uc.getDailyChallenge().getCreatedAt().toLocalDate())  // 여기 변환
+                        .createdAt(uc.getDailyChallenge().getCreatedAt())  // 여기 변환
                         .isCompleted(uc.isCompleted())
                         .build())
                 .toList();

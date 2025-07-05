@@ -39,7 +39,7 @@ public class DailyChallenge {
 
   @Column(name = "created_at", updatable = false)
   @CreationTimestamp
-  private LocalDateTime createdAt;
+  private LocalDate createdAt;
 
   @Enumerated(EnumType.STRING)
   private Category category;
