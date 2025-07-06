@@ -11,11 +11,13 @@ import com.soopgyeol.api.repository.PurchaseRepository;
 import com.soopgyeol.api.repository.UserRepository;
 import com.soopgyeol.api.common.exception.InsufficientBalanceException;
 import com.soopgyeol.api.common.exception.ItemAlreadyOwnedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class BuyServiceImpl implements BuyService {
 
@@ -58,6 +60,7 @@ public class BuyServiceImpl implements BuyService {
         // 3. 금액 차감
         int money = item.getPrice();
         user.subMoney(money);
+        log.info("[금액 차감 완료] 현재 잔액: {}", user.getMoneyBalance());
 
         // 4. 인벤토리 저장
         Purchase purchase = Purchase.builder()
@@ -68,14 +71,22 @@ public class BuyServiceImpl implements BuyService {
 
         purchaseRepository.save(purchase);
 
-        Inventory inventory = Inventory.builder()
-                .user(user)
-                .item(item)
-                .isBuyed(true)
-                .isDisplayed(false) // 기본값, 필요에 따라 true로
-                .buyAt(LocalDateTime.now())
-                .build();
-        inventoryRepository.save(inventory);
+        try {
+            Inventory inventory = Inventory.builder()
+                    .user(user)
+                    .item(item)
+                    .isBuyed(true)
+                    .isDisplayed(false) // 기본값, 필요에 따라 true로
+                    .buyAt(LocalDateTime.now())
+                    .build();
+
+            inventoryRepository.save(inventory);
+            log.info("[Inventory 저장 완료]");
+
+        } catch (Exception e) {
+            log.error("[Inventory 저장 실패] 에러: {}", e.getMessage(), e);
+            throw new RuntimeException("Inventory 저장 실패", e);
+        }
 
         return BuyResult.builder()
                 .itemId(item.getId())
