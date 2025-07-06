@@ -44,7 +44,7 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
                 .carbonGrams(savedItem.getCarbonValue())
                 .growthPoint(savedItem.getGrowthPoint())
                 .explanation(savedItem.getExplanation())
-                .categoryImageUrl(savedItem.getCategory().getImageUrl())
+                .categoryImageUrl(savedItem.getCategory().getSearchImageUrl())
                 .build();
     }
 
@@ -77,7 +77,7 @@ public class CarbonAnalysisServiceImpl implements CarbonAnalysisService {
                 .carbonGrams(savedItem.getCarbonValue())
                 .growthPoint(savedItem.getGrowthPoint())
                 .explanation(savedItem.getExplanation())
-                .categoryImageUrl(savedItem.getCategory().getImageUrl())
+                .categoryImageUrl(savedItem.getCategory().getSearchImageUrl())
                 .challengeId(challengeId)
                 .build();
     }

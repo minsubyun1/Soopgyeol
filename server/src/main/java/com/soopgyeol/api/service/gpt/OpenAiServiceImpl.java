@@ -32,7 +32,7 @@ public class OpenAiServiceImpl implements OpenAiService {
                 품목명과, 탄소량 설명은 반드시 한글로 대답해줘.
                 
                 
-                FOOD, TRANSPORTATION, CLOTHING, HOUSING_ENERGY, RECYCLE_WASTE, LIFESTYLE_CONSUMPTION, ETC 중 하나
+                FOOD, TRANSPORT, CLOTHING, HOUSING_ENERGY, RECYCLE_WASTE, LIFESTYLE_CONSUMPTION, ETC 중 하나
                 
                 "growthPoint"는 사용자의 해당 활동 또는 소비에 따라서 탄소가 절감되는 정도를 너가 판단해서 0~20점 사이로 점수를 줘.
                 ETC는 탄소량, growthPoint 모두 0점으로 줘.

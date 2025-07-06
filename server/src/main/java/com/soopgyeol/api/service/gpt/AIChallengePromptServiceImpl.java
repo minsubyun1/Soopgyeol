@@ -34,7 +34,7 @@ public class AIChallengePromptServiceImpl implements AIChallengePromptService {
                 - challengeTitle은 15자 이내의 짧고 명확한 챌린지 제목
                 - rewardMoney는 너가 판단하기에 챌린지 난이도에 따라 5 ~ 20으로 줘!
                 - carbonKeyword는 기존 탄소 소비 분석 기능에서 사용하는 실생활 소비 키워드여야 해 (예: 다회용컵, 채식, 대중교통, 전기차, 에너지 절약, 음식물 쓰레기 줄이기 등)
-                - category는 FOOD, TRANSPORTATION, CLOTHING, HOUSING_ENERGY, RECYCLE_WASTE, LIFESTYLE_CONSUMPTION 중 하나
+                - category는 FOOD, TRANSPORT, CLOTHING, HOUSING_ENERGY, RECYCLE_WASTE, LIFESTYLE_CONSUMPTION 중 하나
                 {
                   "challengeTitle": (챌린지명),
                   "category": (위 category 중 하나),
