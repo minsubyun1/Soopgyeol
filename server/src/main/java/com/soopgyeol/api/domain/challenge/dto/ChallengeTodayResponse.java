@@ -4,6 +4,8 @@ import com.soopgyeol.api.domain.enums.Category;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Builder
 @Getter
 public class ChallengeTodayResponse {
@@ -16,4 +18,5 @@ public class ChallengeTodayResponse {
     private int progressCount;
     private boolean isCompleted;
     private String categoryImageUrl;
+    private LocalDate createdAt;
 }
