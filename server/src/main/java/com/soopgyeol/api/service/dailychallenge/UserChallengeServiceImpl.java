@@ -78,6 +78,7 @@ public class UserChallengeServiceImpl implements UserChallengeService {
                 .category(dailyChallenge.getCategory())
                 .progressCount(userChallenge.getProgressCount())
                 .isCompleted(userChallenge.isCompleted())
+                .createdAt(today)
                 .categoryImageUrl(dailyChallenge.getCategory().getChallengeImageUrl())
                 .build();
     }
