@@ -95,7 +95,7 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService {
 
 
 
-                List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetween(userId, startOfDay,
+                List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetweenAndIsFromChallengeFalse(userId, startOfDay,
                                 endOfDay);
 
                 int totalGrowthPoint = logs.stream()
@@ -115,30 +115,7 @@ public class UserCarbonLogServiceImpl implements UserCarbonLogService {
                         .build();
         }
 
-        public UserCarbonLogSummaryResponse getChallengeLogsByUserIdAndDate(Long userId, LocalDate date) {
-                LocalDateTime start = date.atStartOfDay();
-                LocalDateTime end = date.atTime(LocalTime.MAX);
 
-                List<UserCarbonLog> logs = carbonLogRepository.findByUserIdAndRecordedAtBetweenAndIsFromChallengeTrue(
-                        userId, start, end
-                );
-
-                int totalGrowthPoint = logs.stream()
-                        .mapToInt(UserCarbonLog::getGrowthPoint)
-                        .sum();
-
-                List<UserCarbonLogResponse> logDtos = logs.stream()
-                        .map(log -> UserCarbonLogResponse.builder()
-                                .product(log.getCarbonItem().getName())
-                                .growthPoint(log.getGrowthPoint())
-                                .build())
-                        .toList();
-
-                return UserCarbonLogSummaryResponse.builder()
-                        .logs(logDtos)
-                        .totalGrowthPoint(totalGrowthPoint)
-                        .build();
-        }
 
 
 }
