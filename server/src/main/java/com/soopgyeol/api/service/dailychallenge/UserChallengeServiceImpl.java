@@ -119,6 +119,7 @@ public class UserChallengeServiceImpl implements UserChallengeService {
                         .title(uc.getDailyChallenge().getTitle())
                         .createdAt(uc.getDailyChallenge().getCreatedAt())  // 여기 변환
                         .isCompleted(uc.isCompleted())
+                        .progressCount(uc.getProgressCount())
                         .build())
                 .toList();
 

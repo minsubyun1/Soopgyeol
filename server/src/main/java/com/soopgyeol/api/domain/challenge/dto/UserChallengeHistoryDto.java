@@ -13,4 +13,5 @@ public class UserChallengeHistoryDto {
     private String title;
     private LocalDate createdAt;
     private boolean isCompleted;
+    private int progressCount;
 }

@@ -20,7 +20,7 @@ openai:
     key: ${OPENAI_API_KEY}
 
 server:
-  port: 3004
+  port: 8080
 
 oauth:
   google:
