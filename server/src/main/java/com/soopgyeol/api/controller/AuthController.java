@@ -84,20 +84,20 @@ public class AuthController {
 
 
     // 임시 토큰 생성시 활성화
-    private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
-    @PostMapping("/dev-login")
-    public OAuthLoginResponse devLogin(@RequestParam Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
-
-        String jwt = jwtProvider.createToken(user.getId(), user.getRole());
-
-        return OAuthLoginResponse.builder()
-                .jwtToken(jwt)
-                .isNewUser(false)
-                .build();
-    }
+//    private final UserRepository userRepository;
+//    private final JwtProvider jwtProvider;
+//    @PostMapping("/dev-login")
+//    public OAuthLoginResponse devLogin(@RequestParam("userId") Long userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+//
+//        String jwt = jwtProvider.createToken(user.getId(), user.getRole());
+//
+//        return OAuthLoginResponse.builder()
+//                .jwtToken(jwt)
+//                .isNewUser(false)
+//                .build();
+//    }
 
 
 }
