@@ -44,8 +44,6 @@ public class BuyServiceImpl implements BuyService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
 
-        user.setMoneyBalance(10000);
-
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("아이템이 존재하지 않습니다."));
 
