@@ -40,17 +40,7 @@ public class UserCarbonLogController {
         return ResponseEntity.ok(new ApiResponse<>(true, "조회 성공", logs));
     }
 
-    @GetMapping("/daily/challenge")
-    public ResponseEntity<ApiResponse<UserCarbonLogSummaryResponse>> getChallengeLogsByDate(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        UserCarbonLogSummaryResponse summaryResponse = userCarbonLogService.getChallengeLogsByUserIdAndDate(
-                userDetails.getUserId(), date
-        );
-
-        return ResponseEntity.ok(new ApiResponse<>(true, "챌린지 탄소 활동 조회 성공", summaryResponse));
-    }
 
 
 }

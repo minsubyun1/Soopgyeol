@@ -12,6 +12,5 @@ public interface UserCarbonLogService {
 
     UserCarbonLogSummaryResponse getLogsByUserIdAndDate(Long userId, LocalDate date);
 
-    // 챌린지 로그만 조회
-    UserCarbonLogSummaryResponse getChallengeLogsByUserIdAndDate(Long userId, LocalDate date);
+
 }
