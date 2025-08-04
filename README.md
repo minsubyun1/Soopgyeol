@@ -1,7 +1,7 @@
 # 구름톤 서북지구 팀 프로젝트 : 숲결 🌿
 
 ## 앱 소개
-![숲결 사진](server/images/soopgyoel_img.png)
+![숲결 사진](https://raw.githubusercontent.com/minsubyun1/Soopgyeol/main/server/images/soopgyoel_img.png)
 : AI를 기반으로 일상 속에서 탄소 소비를 기록하고, 시각화 하는 친환경 습관 형성 app
 <br><br>
 
